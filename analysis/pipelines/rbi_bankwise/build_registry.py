@@ -63,6 +63,10 @@ def entries() -> dict[str, dict]:
             f"Of the year's change in {lab}, how much each bank added or lost (contribution, always; "
             f"alloc when banks moved together); absent across a declared merger.",
             {"method": "csv_bank_allocation", "metric": m, "unit": "crore", "window": 12}, dom)
+        add(f"{p}-bank-acceleration", f"{n['label']} — each bank's pace",
+            f"The change in each bank's growth a year in {lab} since the previous quarter, in points; "
+            f"absent across a declared merger.",
+            {"method": "csv_bank_acceleration", "metric": m}, dom)
         add(f"{p}-yoy", f"{n['label']} — all banks, growth a year",
             f"Year-on-year change in all banks' {lab} (RBI's All SCBs row).",
             {"method": "csv_total_yoy", "metric": m}, dom)

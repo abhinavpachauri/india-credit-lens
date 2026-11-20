@@ -92,6 +92,7 @@ METHOD_CATEGORY = {
     "csv_sector_fy_acceleration":    "C5",
     "csv_sector_acceleration":       "C5",
     "csv_category_acceleration":     "C5",
+    "csv_bank_acceleration":         "C5",
     "csv_sector_fy_delta":           "C5",
 }
 

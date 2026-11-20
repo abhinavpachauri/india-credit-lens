@@ -1,12 +1,14 @@
 {
  "_meta": {
   "what": "Bank mergers inside the bank-wise history: a growth or new-money comparison across one, on a listed line, is absent with reason merger_break (core/series_breaks; BANKWISE_SPEC §8a).",
-  "lines_rule": "statement 'bank' and code = the roster bank id, the bank group label, or 'total'. A merger between two banks lists both (the absorbed bank's exit and the absorbing bank's jump are the same event); a non-bank merged into a bank also lists its group and the total, because the system grows by it."
+  "lines_rule": "statement 'bank' and code = the roster bank id, the bank group label, or 'total'. A merger between two banks lists both (the absorbed bank's exit and the absorbing bank's jump are the same event); a non-bank merged into a bank also lists its group and the total, because the system grows by it.",
+  "label": "Each break's `label` is the line a chart marker shows (core/bank_tables.markers), written for a reader."
  },
  "breaks": [
   {
    "id": "kotak_ing_vysya_2015",
    "effective": "2015-04-01",
+   "label": "Kotak Mahindra Bank absorbs ING Vysya Bank",
    "reason": "merger_break",
    "lines": [
     {
@@ -23,6 +25,7 @@
   {
    "id": "sbi_associates_2017",
    "effective": "2017-04-01",
+   "label": "State Bank of India absorbs its five associate banks and Bharatiya Mahila Bank",
    "reason": "merger_break",
    "lines": [
     {
@@ -59,6 +62,7 @@
   {
    "id": "idfc_capital_first_2018",
    "effective": "2018-12-01",
+   "label": "IDFC Bank merges with Capital First, a non-bank lender",
    "reason": "merger_break",
    "lines": [
     {
@@ -79,6 +83,7 @@
   {
    "id": "bob_dena_vijaya_2019",
    "effective": "2019-04-01",
+   "label": "Bank of Baroda absorbs Dena Bank and Vijaya Bank",
    "reason": "merger_break",
    "lines": [
     {
@@ -99,6 +104,7 @@
   {
    "id": "psb_amalgamations_2020",
    "effective": "2020-04-01",
+   "label": "Ten public sector banks become four: PNB, Canara Bank, Union Bank of India and Indian Bank absorb six",
    "reason": "merger_break",
    "lines": [
     {
@@ -147,6 +153,7 @@
   {
    "id": "dbs_lakshmi_vilas_2021",
    "effective": "2021-04-01",
+   "label": "DBS Bank India absorbs Lakshmi Vilas Bank",
    "reason": "merger_break",
    "lines": [
     {
@@ -163,6 +170,7 @@
   {
    "id": "hdfc_ltd_2023",
    "effective": "2023-07-01",
+   "label": "HDFC Bank merges with HDFC Ltd, a housing finance company",
    "reason": "merger_break",
    "lines": [
     {

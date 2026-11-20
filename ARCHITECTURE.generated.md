@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 118 scripts._
+_Derived from 119 scripts._
 
 ## 1. Data-flow
 
@@ -113,6 +113,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 Python import edges (sparse by design — the pipeline is subprocess-
 orchestrated, not import-coupled).
 
+- `core/bank_tables` → `core/absence`, `core/manifest`, `core/table_rows`
 - `core/coverage` → `core/explainability`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`, `core/series_breaks`, `signals/dominance`
 - `core/derive_opportunities` → `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/ecb_evidence` → `core/coverage`, `core/force_check`, `core/generate_skeleton`
@@ -140,7 +141,7 @@ orchestrated, not import-coupled).
 - `guards/check_signal_freshness` → `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`, `signals/db_pack`
 - `guards/validate_card_cuts` → `core/manifest`
 - `guards/validate_card_prose` → `core/manifest`, `core/residuals`, `core/voice`
-- `guards/validate_cut_table` → `core/absence`, `core/manifest`, `core/real_cells`, `core/table_columns`, `core/table_rows`, `signals/compute/csv_sector`, `signals/compute/real_economy`
+- `guards/validate_cut_table` → `core/absence`, `core/bank_tables`, `core/manifest`, `core/real_cells`, `core/table_columns`, `core/table_rows`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `guards/validate_signal_history` → `core/cadence`
 - `guards/validate_state_band` → `core/manifest`
 - `hook_validate` → `core/manifest`
@@ -181,7 +182,7 @@ orchestrated, not import-coupled).
 - `signals/query` → `core/cadence`
 - `signals/stamp_planes` → `signals/planes`, `signals/proximity`
 - `signals/stamp_state` → `core/manifest`, `core/state_lines`
-- `signals/stamp_table` → `core/banks`, `core/manifest`, `core/real_cells`, `core/table_labels`, `core/table_rows`
+- `signals/stamp_table` → `core/bank_tables`, `core/banks`, `core/manifest`, `core/real_cells`, `core/table_labels`, `core/table_rows`
 
 ## 5. Findings (drift signals)
 

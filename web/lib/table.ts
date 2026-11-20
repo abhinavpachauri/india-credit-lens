@@ -1,4 +1,4 @@
-import type { Pipeline } from "@/lib/opportunities";
+import type { Pipeline } from "./opportunities";
 // The Layer 1 cut table (DASHBOARD_SPEC §17, reshaped by §20) — loader + types.
 //
 // Every number arrives ALREADY RENDERED. `display` is drawn; `sort` orders and is never
@@ -28,7 +28,7 @@ export interface Cell {
 
 // The columns are declared ONCE, in analysis/core/table_columns.py, and generated into
 // table_columns.ts for the builder, the gate and this file to share (DASHBOARD_SPEC §21.5).
-import { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, COL_HINT, GROUP_HINT, type ColKey } from "@/lib/table_columns";
+import { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, COL_HINT, GROUP_HINT, type ColKey } from "./table_columns";
 export { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, COL_HINT, GROUP_HINT, type ColKey };
 
 export interface CutRow {
@@ -50,6 +50,16 @@ export interface CutRow {
   approx?: string;
   /** The cut this part decomposes into, when it has one (§19) — resolved in Python. */
   sub_cut?: string | null;
+  /** Per-bank tables: the bank's book a year earlier was under the minimum base (DECISIONS,
+   *  2026-11-20), so its growth and pace are shown, marked, and sort last. */
+  small_base?: boolean;
+  /** Events on this row's history, each named where it happened (a declared merger, a quarter
+   *  RBI's own figures fail): the axis label it sits at and the sentence, both from Python. */
+  markers?: { at: string; kind: "merger" | "flag"; text: string }[];
+  /** A bank's book: a line under the one above it (retail's parts). Sorting keeps it there. */
+  indent?: number;
+  /** A bank's book: each row is a different signal, so it declares its own (for the gate). */
+  columns?: Partial<Record<ColKey, string>>;
 }
 
 export interface CutTable {
@@ -75,7 +85,7 @@ export interface CutTable {
   metric?: string;
   /** "bank" = the same measure broken out over the 63 reporting banks rather than the five
    *  bank categories. A different LEVEL of one table, not a drilldown into a row. */
-  level?: "bank";
+  level?: "bank" | "book";
   /** The measure's name in a measure menu, declared in Python (bank-wise). */
   title?: string;
   /** Columns a heading click may not sort by, declared in Python: growth off a tiny base would
@@ -86,6 +96,11 @@ export interface CutTable {
   col_labels?: Partial<Record<ColKey, string>>;
   /** One always-visible sentence per share column, its example number gate-checked. */
   key?: string[];
+  /** Lines under the table that hold no number from the store (the small-base rule). */
+  notes?: string[];
+  /** Where this table's sub-cuts are served when they are not in the sidecar: a bank's book is
+   *  fetched from `/data/{sub_cut_dir}/{sub_cut}.json` when its row opens. */
+  sub_cut_dir?: string;
   /** §21: what the real-economy columns cover this period, and what they mean. */
   real_economy?: { coverage: string[]; footnote: string[] };
   source_signals: string[];
@@ -152,15 +167,44 @@ export type SortDir = "desc" | "asc";
  *  decision left is what a missing value does. It SINKS, in both directions — a column the
  *  data cannot fill must never lead the table (Infrastructure's whole flow column is "—"
  *  because its mix is contested, and a table led by dashes says nothing). */
+/** Growth and pace rank only banks above the minimum base; the rest follow, in the same order. */
+const RANKED_BY_BASE: SortKey[] = ["growth", "pace"];
+
 export function sortParts(parts: CutRow[], key: SortKey, dir: SortDir = "desc"): CutRow[] {
   const sign = dir === "desc" ? 1 : -1;
-  return [...parts].sort((a, b) => {
+  const cmp = (a: CutRow, b: CutRow) => {
+    if (RANKED_BY_BASE.includes(key) && !!a.small_base !== !!b.small_base) return a.small_base ? 1 : -1;
     const av = a[key]?.sort, bv = b[key]?.sort;
     if (av == null && bv == null) return 0;
     if (av == null) return 1;
     if (bv == null) return -1;
     return (bv - av) * sign;
-  });
+  };
+  // A line under another (a bank's retail parts) sorts among its siblings and stays under its
+  // parent; without indented rows this is the plain sort.
+  if (!parts.some((p) => p.indent)) return [...parts].sort(cmp);
+  const groups: { head: CutRow; kids: CutRow[] }[] = [];
+  for (const p of parts) {
+    if (p.indent && groups.length) groups[groups.length - 1].kids.push(p);
+    else groups.push({ head: p, kids: [] });
+  }
+  return groups.sort((a, b) => cmp(a.head, b.head))
+    .flatMap((g) => [g.head, ...g.kids.sort(cmp)]);
+}
+
+const subCache = new Map<string, CutTable | null>();
+
+/** Fetch a sub-cut that is served beside the sidecar (a bank's book), once. */
+export async function loadSubTable(dir: string, stem: string): Promise<CutTable | null> {
+  const file = `${dir}/${stem}.json`;
+  if (subCache.has(file)) return subCache.get(file)!;
+  let table: CutTable | null = null;
+  try {
+    const res = await fetch(`/data/${file}`);
+    if (res.ok) table = (await res.json()) as CutTable;
+  } catch { /* left null: the row says it could not open rather than breaking the page */ }
+  subCache.set(file, table);
+  return table;
 }
 
 /** The readings behind one cell, paired with their axis labels — what the side panel draws. */

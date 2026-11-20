@@ -5,87 +5,206 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 169,
+    "signals_observed": 182,
     "force_rule": "v3.0"
   },
   "entity_states": {
     "icl:rbi_bankwise/credit/gross": {
       "direction": 1,
-      "signals": 12,
-      "observed": 12,
+      "signals": 13,
+      "observed": 13,
       "coherence": 1.0,
       "children": 2
     },
     "icl:rbi_bankwise/credit/food": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/non_food": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13,
+      "signals": 14,
+      "observed": 14,
       "coherence": 1.0,
       "children": 5
     },
     "icl:rbi_bankwise/credit/agri": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/industry": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/other_non_food": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/retail": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13,
+      "signals": 14,
+      "observed": 14,
       "coherence": 1.0,
       "children": 5
     },
     "icl:rbi_bankwise/credit/services": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/cards": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/education": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/housing": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/other_retail": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:rbi_bankwise/credit/vehicle": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     }
   },
-  "force_states": {},
-  "edge_states": {},
+  "force_states": {
+    "force_idbi_recategorisation": {
+      "state": "active",
+      "instance_of": "ch_ownership_recategorisation",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.0"
+    },
+    "force_psb_amalgamation_2020": {
+      "state": "active",
+      "instance_of": "ch_bank_amalgamation_book_transfer",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.0"
+    },
+    "force_hdfc_ltd_merger": {
+      "state": "active",
+      "instance_of": "ch_bank_amalgamation_book_transfer",
+      "evidence_observed": 4,
+      "evidence_total": 4,
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.0"
+    },
+    "force_psb_recapitalisation_2017": {
+      "state": "active",
+      "instance_of": "ch_bank_capital_injection",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.0"
+    },
+    "force_pca_psb_restrictions": {
+      "state": "active",
+      "instance_of": "ch_supervisory_lending_restriction",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.0"
+    },
+    "force_rbi_unsecured_tightening": {
+      "state": "active",
+      "instance_of": "ch_capital_weight_unsecured",
+      "evidence_observed": 4,
+      "evidence_total": 4,
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.0"
+    }
+  },
+  "edge_states": {
+    "force_idbi_recategorisation__drives__e_credit_gross": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "~",
+      "from": "force_idbi_recategorisation",
+      "to": "e_credit_gross"
+    },
+    "force_psb_amalgamation_2020__drives__e_credit_gross": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "~",
+      "from": "force_psb_amalgamation_2020",
+      "to": "e_credit_gross"
+    },
+    "force_hdfc_ltd_merger__drives__e_credit_housing": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_hdfc_ltd_merger",
+      "to": "e_credit_housing"
+    },
+    "force_hdfc_ltd_merger__drives__e_credit_gross": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_hdfc_ltd_merger",
+      "to": "e_credit_gross"
+    },
+    "force_psb_recapitalisation_2017__drives__e_credit_gross": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psb_recapitalisation_2017",
+      "to": "e_credit_gross"
+    },
+    "force_pca_psb_restrictions__suppresses__e_credit_gross": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_pca_psb_restrictions",
+      "to": "e_credit_gross"
+    },
+    "force_rbi_unsecured_tightening__suppresses__e_credit_cards": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_credit_cards"
+    },
+    "force_rbi_unsecured_tightening__suppresses__e_credit_other_retail": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_credit_other_retail"
+    }
+  },
   "loop_states": {},
   "system_observations": {
-    "dominant_forces": [],
+    "dominant_forces": [
+      "force_idbi_recategorisation",
+      "force_psb_amalgamation_2020",
+      "force_hdfc_ltd_merger",
+      "force_psb_recapitalisation_2017",
+      "force_pca_psb_restrictions",
+      "force_rbi_unsecured_tightening"
+    ],
     "binding_constraints": [],
     "active_reinforcing_loops": [],
     "active_balancing_loops": [],
@@ -223,7 +342,136 @@
       "children": 5
     }
   },
-  "force_check": {},
+  "force_check": {
+    "force_idbi_recategorisation": {
+      "verdict": "unassessable",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_idbi_recategorisation__drives__e_credit_gross": {
+          "entity": "Gross advances (all banks)",
+          "type": "drives",
+          "growth": null,
+          "baseline_kind": "root",
+          "baseline_of": "Gross advances (all banks)",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_psb_amalgamation_2020": {
+      "verdict": "unassessable",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psb_amalgamation_2020__drives__e_credit_gross": {
+          "entity": "Gross advances (all banks)",
+          "type": "drives",
+          "growth": null,
+          "baseline_kind": "root",
+          "baseline_of": "Gross advances (all banks)",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_hdfc_ltd_merger": {
+      "verdict": "unassessable",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_hdfc_ltd_merger__drives__e_credit_housing": {
+          "entity": "Housing loans",
+          "type": "drives",
+          "growth": null,
+          "baseline_kind": "parent",
+          "baseline_of": "Retail loans",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        },
+        "force_hdfc_ltd_merger__drives__e_credit_gross": {
+          "entity": "Gross advances (all banks)",
+          "type": "drives",
+          "growth": null,
+          "baseline_kind": "root",
+          "baseline_of": "Gross advances (all banks)",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_psb_recapitalisation_2017": {
+      "verdict": "unassessable",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psb_recapitalisation_2017__drives__e_credit_gross": {
+          "entity": "Gross advances (all banks)",
+          "type": "drives",
+          "growth": null,
+          "baseline_kind": "root",
+          "baseline_of": "Gross advances (all banks)",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_pca_psb_restrictions": {
+      "verdict": "unassessable",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_pca_psb_restrictions__suppresses__e_credit_gross": {
+          "entity": "Gross advances (all banks)",
+          "type": "suppresses",
+          "growth": null,
+          "baseline_kind": "root",
+          "baseline_of": "Gross advances (all banks)",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_rbi_unsecured_tightening": {
+      "verdict": "unassessable",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_rbi_unsecured_tightening__suppresses__e_credit_cards": {
+          "entity": "Credit card receivables",
+          "type": "suppresses",
+          "growth": null,
+          "baseline_kind": "parent",
+          "baseline_of": "Retail loans",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        },
+        "force_rbi_unsecured_tightening__suppresses__e_credit_other_retail": {
+          "entity": "Other retail loans",
+          "type": "suppresses",
+          "growth": null,
+          "baseline_kind": "parent",
+          "baseline_of": "Retail loans",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    }
+  },
   "explanation_coverage": {
     "summary": {
       "lines": 12,

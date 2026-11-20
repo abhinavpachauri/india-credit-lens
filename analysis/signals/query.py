@@ -107,6 +107,7 @@ METHOD_TYPE: dict[str, str] = {
     # sector family; the break flag is flagged-entities-only, the divergence shape
     "csv_bank_momentum":       "scan",
     "csv_bank_allocation":     "scan",
+    "csv_bank_acceleration":   "scan",
     "csv_bank_step":           "divergence",
 }
 

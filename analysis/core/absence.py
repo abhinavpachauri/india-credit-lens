@@ -32,6 +32,9 @@ PER_PERIOD = {
     "reference_history_gap": "MoSPI's series on this base does not reach back to this period",
     # user, 2026-10-10: the HDFC merger (Jul 2023) moved a non-bank's loans into bank credit, so a
     # comparison across it on a line RBI marks measures the merger, not growth (core/series_breaks).
+    # user, 2026-11-20 (BANKWISE_SPEC §8b gap 5): RBI's own figures for one bank fail its own check
+    # that quarter (rbi_bankwise/inconsistencies.json), so the reading is left out, never guessed.
+    "flagged_inconsistent":  "RBI's own figures for this bank do not add up that quarter, so the reading is left out rather than guessed",
     "merger_break":          "a merger moved loans into bank credit inside this comparison's window, so the change is not growth",
     # user, 2026-11-04: RBI reprinted a line on a new classification for some months only, so a
     # comparison between a reprinted month and one still on the old basis measures the relabelling.

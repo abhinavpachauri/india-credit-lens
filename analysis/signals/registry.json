@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-11-17",
+    "last_updated": "2026-11-20",
     "cadence_vocabulary": [
       "fortnightly",
       "monthly",
@@ -24263,6 +24263,708 @@
         "method": "csv_category_acceleration",
         "metric": "major_sectoral.other_retail_loans_gross_advances@dom"
       }
+    },
+    "bw-gross-bank-acceleration": {
+      "id": "bw-gross-bank-acceleration",
+      "title": "Gross advances (all banks) — each bank's pace",
+      "description": "The change in each bank's growth a year in gross advances (all banks) since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-food-bank-acceleration": {
+      "id": "bw-food-bank-acceleration",
+      "title": "Food credit — each bank's pace",
+      "description": "The change in each bank's growth a year in food credit since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.food_credit_gross_advances@dom"
+      }
+    },
+    "bw-non-food-bank-acceleration": {
+      "id": "bw-non-food-bank-acceleration",
+      "title": "Non-food credit — each bank's pace",
+      "description": "The change in each bank's growth a year in non-food credit since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom"
+      }
+    },
+    "bw-agri-bank-acceleration": {
+      "id": "bw-agri-bank-acceleration",
+      "title": "Agriculture and allied activities — each bank's pace",
+      "description": "The change in each bank's growth a year in agriculture and allied activities since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom"
+      }
+    },
+    "bw-industry-bank-acceleration": {
+      "id": "bw-industry-bank-acceleration",
+      "title": "Industry — each bank's pace",
+      "description": "The change in each bank's growth a year in industry since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.industry_gross_advances@dom"
+      }
+    },
+    "bw-services-bank-acceleration": {
+      "id": "bw-services-bank-acceleration",
+      "title": "Services — each bank's pace",
+      "description": "The change in each bank's growth a year in services since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.services_gross_advances@dom"
+      }
+    },
+    "bw-retail-bank-acceleration": {
+      "id": "bw-retail-bank-acceleration",
+      "title": "Retail loans — each bank's pace",
+      "description": "The change in each bank's growth a year in retail loans since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom"
+      }
+    },
+    "bw-other-non-food-bank-acceleration": {
+      "id": "bw-other-non-food-bank-acceleration",
+      "title": "Other non-food credit — each bank's pace",
+      "description": "The change in each bank's growth a year in other non-food credit since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom"
+      }
+    },
+    "bw-housing-bank-acceleration": {
+      "id": "bw-housing-bank-acceleration",
+      "title": "Housing loans — each bank's pace",
+      "description": "The change in each bank's growth a year in housing loans since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom"
+      }
+    },
+    "bw-vehicle-bank-acceleration": {
+      "id": "bw-vehicle-bank-acceleration",
+      "title": "Vehicle / auto loans — each bank's pace",
+      "description": "The change in each bank's growth a year in vehicle / auto loans since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom"
+      }
+    },
+    "bw-cards-bank-acceleration": {
+      "id": "bw-cards-bank-acceleration",
+      "title": "Credit card receivables — each bank's pace",
+      "description": "The change in each bank's growth a year in credit card receivables since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom"
+      }
+    },
+    "bw-education-bank-acceleration": {
+      "id": "bw-education-bank-acceleration",
+      "title": "Education loans — each bank's pace",
+      "description": "The change in each bank's growth a year in education loans since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom"
+      }
+    },
+    "bw-other-retail-bank-acceleration": {
+      "id": "bw-other-retail-bank-acceleration",
+      "title": "Other retail loans — each bank's pace",
+      "description": "The change in each bank's growth a year in other retail loans since the previous quarter, in points; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom"
+      }
+    },
+    "atm-offsite-bank-acceleration": {
+      "title": "ATM offsite — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "atm_offsite"
+      },
+      "id": "atm-offsite-bank-acceleration",
+      "current_status": "stable",
+      "description": "The change in each bank's year-on-year growth in atm_offsite since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "atm-onsite-bank-acceleration": {
+      "title": "ATM onsite — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "atm_onsite"
+      },
+      "id": "atm-onsite-bank-acceleration",
+      "current_status": "stable",
+      "description": "The change in each bank's year-on-year growth in atm_onsite since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "bharat-qr-bank-acceleration": {
+      "title": "bharat QR — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "bharat_qr"
+      },
+      "id": "bharat-qr-bank-acceleration",
+      "current_status": "stable",
+      "description": "The change in each bank's year-on-year growth in bharat_qr since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-atm-withdrawal-val-bank-acceleration": {
+      "title": "credit card ATM withdrawals value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_atm_withdrawal_val"
+      },
+      "id": "cc-atm-withdrawal-val-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_atm_withdrawal_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-atm-withdrawal-vol-bank-acceleration": {
+      "title": "credit card ATM withdrawals volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_atm_withdrawal_vol"
+      },
+      "id": "cc-atm-withdrawal-vol-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_atm_withdrawal_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-bank-acceleration": {
+      "title": "Credit cards — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "credit_cards"
+      },
+      "id": "cc-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in credit_cards since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-ecom-txn-val-bank-acceleration": {
+      "title": "credit card eCommerce transactions value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_ecom_txn_val"
+      },
+      "id": "cc-ecom-txn-val-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_ecom_txn_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-ecom-txn-vol-bank-acceleration": {
+      "title": "credit card eCommerce transactions volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_ecom_txn_vol"
+      },
+      "id": "cc-ecom-txn-vol-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_ecom_txn_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-other-txn-val-bank-acceleration": {
+      "title": "credit card other transactions value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_other_txn_val"
+      },
+      "id": "cc-other-txn-val-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_other_txn_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-other-txn-vol-bank-acceleration": {
+      "title": "credit card other transactions volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_other_txn_vol"
+      },
+      "id": "cc-other-txn-vol-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_other_txn_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-pos-txn-val-bank-acceleration": {
+      "title": "credit card POS transactions value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_pos_txn_val"
+      },
+      "id": "cc-pos-txn-val-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_pos_txn_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-pos-txn-vol-bank-acceleration": {
+      "title": "credit card POS transactions volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "cc_pos_txn_vol"
+      },
+      "id": "cc-pos-txn-vol-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in cc_pos_txn_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-atm-withdrawal-val-bank-acceleration": {
+      "title": "debit card ATM withdrawals value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_atm_withdrawal_val"
+      },
+      "id": "dc-atm-withdrawal-val-bank-acceleration",
+      "current_status": "strengthening",
+      "description": "The change in each bank's year-on-year growth in dc_atm_withdrawal_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-atm-withdrawal-vol-bank-acceleration": {
+      "title": "debit card ATM withdrawals volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_atm_withdrawal_vol"
+      },
+      "id": "dc-atm-withdrawal-vol-bank-acceleration",
+      "current_status": "strengthening",
+      "description": "The change in each bank's year-on-year growth in dc_atm_withdrawal_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-bank-acceleration": {
+      "title": "Debit cards — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "debit_cards"
+      },
+      "id": "dc-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in debit_cards since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-ecom-txn-val-bank-acceleration": {
+      "title": "debit card eCommerce transactions value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_ecom_txn_val"
+      },
+      "id": "dc-ecom-txn-val-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in dc_ecom_txn_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-ecom-txn-vol-bank-acceleration": {
+      "title": "debit card eCommerce transactions volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_ecom_txn_vol"
+      },
+      "id": "dc-ecom-txn-vol-bank-acceleration",
+      "current_status": "strengthening",
+      "description": "The change in each bank's year-on-year growth in dc_ecom_txn_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-other-txn-val-bank-acceleration": {
+      "title": "debit card other transactions value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_other_txn_val"
+      },
+      "id": "dc-other-txn-val-bank-acceleration",
+      "current_status": "strengthening",
+      "description": "The change in each bank's year-on-year growth in dc_other_txn_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-other-txn-vol-bank-acceleration": {
+      "title": "debit card other transactions volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_other_txn_vol"
+      },
+      "id": "dc-other-txn-vol-bank-acceleration",
+      "current_status": "strengthening",
+      "description": "The change in each bank's year-on-year growth in dc_other_txn_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-pos-txn-val-bank-acceleration": {
+      "title": "debit card POS transactions value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_pos_txn_val"
+      },
+      "id": "dc-pos-txn-val-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in dc_pos_txn_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-pos-txn-vol-bank-acceleration": {
+      "title": "debit card POS transactions volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_pos_txn_vol"
+      },
+      "id": "dc-pos-txn-vol-bank-acceleration",
+      "current_status": "strengthening",
+      "description": "The change in each bank's year-on-year growth in dc_pos_txn_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-pos-withdrawal-val-bank-acceleration": {
+      "title": "debit card POS withdrawals value — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_pos_withdrawal_val"
+      },
+      "id": "dc-pos-withdrawal-val-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in dc_pos_withdrawal_val since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-pos-withdrawal-vol-bank-acceleration": {
+      "title": "debit card POS withdrawals volume — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "dc_pos_withdrawal_vol"
+      },
+      "id": "dc-pos-withdrawal-vol-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in dc_pos_withdrawal_vol since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "micro-atms-bank-acceleration": {
+      "title": "micro ATMs — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "micro_atms"
+      },
+      "id": "micro-atms-bank-acceleration",
+      "current_status": "stable",
+      "description": "The change in each bank's year-on-year growth in micro_atms since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "pos-bank-acceleration": {
+      "title": "POS terminals — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "pos_terminals"
+      },
+      "id": "pos-bank-acceleration",
+      "current_status": "weakening",
+      "description": "The change in each bank's year-on-year growth in pos_terminals since the previous month, in points.",
+      "first_seen": "2024-01-31"
+    },
+    "upi-qr-bank-acceleration": {
+      "title": "upi QR — each bank's pace",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_acceleration",
+        "metric": "upi_qr"
+      },
+      "id": "upi-qr-bank-acceleration",
+      "current_status": "strengthening",
+      "description": "The change in each bank's year-on-year growth in upi_qr since the previous month, in points.",
+      "first_seen": "2024-01-31"
     }
   }
 }

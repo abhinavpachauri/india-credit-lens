@@ -6,11 +6,11 @@
 
 import React from "react";
 import {
-  sortParts as sortPartsMemo, cellSeries, COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL,
+  sortParts as sortPartsMemo, cellSeries, loadSubTable, COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL,
   COL_HINT, GROUP_HINT,
   type ColKey, type SortKey, type SortDir,
 } from "@/lib/table";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import ChartLegend from "@/components/ChartLegend";
 import SectionCard from "@/components/SectionCard";
 import { pickColor } from "@/lib/theme";
@@ -367,7 +367,12 @@ const DASH = <span style={{ color: "var(--font-muted)" }}>—</span>;
 /** Which cell a chart is open on. The table no longer owns this: the chart is a COLUMN of
  *  the page (§20 state C), not an overlay on the table, so the shell holds it and the table
  *  is told what is lit. `stem` because a nested sub-cut is its own table. */
-export interface CellRef { stem: string; entity: string | null; col: ColKey }
+export interface CellRef {
+  stem: string; entity: string | null; col: ColKey;
+  /** The table the cell is in, when it was fetched on open rather than shipped in the sidecar
+   *  (a bank's book): the shell cannot look it up by stem. */
+  table?: import("@/lib/table").CutTable;
+}
 
 /**
  * The chart behind a cell (§20). Every cell is the latest reading of a stored series, so a
@@ -401,7 +406,9 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
   const own = row ? cellSeries(table, row, cell.col) : [];
   // The total row has no entity. It is named as the row list names it, never by the cut's id
   // ("cc-pos-txn-val-category · Growth" was the title, the breadcrumb and the legend chip).
-  const who = row?.label ?? cell.entity ?? title ?? table.cut;
+  // A line of one bank's book is named with its bank: "Housing" alone could be anyone's.
+  const whose = table.level === "book" && table.title ? `${table.title} · ` : "";
+  const who = row?.entity === null && whose ? table.title! : whose + (row?.label ?? cell.entity ?? title ?? table.cut);
   // A row keyed by an id is drawn by its label; the chart's series are keyed by what is drawn.
   const nameOf = (p: import("@/lib/table").CutRow) => p.label ?? p.entity!;
   const siblings = table.parts.filter((p) => p.entity && p.entity !== cell.entity && p[cell.col]?.series);
@@ -444,6 +451,12 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
   };
   const shown = own.filter((p) => p.value !== null);
   const last = own.filter((p) => p.display).at(-1)?.display;
+  // What happened on this line, where it happened (a merger, a quarter RBI's figures fail): a
+  // gap in the line is named rather than left to read as a broken chart. Drawn only where the
+  // axis has that reading; each sentence once.
+  const axis = new Set(own.map((p) => p.label));
+  const markers = (row?.markers ?? []).filter((m, i, a) =>
+    axis.has(m.at) && a.findIndex((x) => x.text === m.text) === i);
 
   // NB no Escape handler here. The SHELL owns the state stack (A/B/C) and pops exactly one
   // level per press; a second listener in this panel meant one Esc popped two levels, which
@@ -496,6 +509,9 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
                                        borderRadius: R.sm, fontSize: FS.note }}
                        formatter={(_v, name, item) =>
                          shownAs[String(name)]?.[String(item?.payload?.label)] ?? "—"} />
+              {markers.filter((m) => m.kind === "merger").map((m) => (
+                <ReferenceLine key={m.text} x={m.at} stroke="var(--font-muted)" strokeDasharray="3 3" />
+              ))}
               {[who, ...compare].map((name) => (
                 // Linear with a dot per reading, not a smoothed curve: the readings are monthly
                 // observations and SIBC's own period set has a gap in it (eleven ingested
@@ -510,6 +526,11 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
         </div>
       </SectionFrame>
 
+      {markers.length > 0 && (
+        <div style={{ ...TEXT.meta, marginBottom: 6, lineHeight: 1.5 }}>
+          {markers.map((m) => <p key={m.text} style={{ margin: 0 }}>{m.kind === "merger" ? "┆ " : "— "}{m.text}</p>)}
+        </div>
+      )}
       {/* One meta line; the readings themselves — rendered in Python, the numbers the gate
           checked — one click away rather than a line of arrows under every chart. */}
       <p style={TEXT.meta}>
@@ -620,6 +641,16 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
   // table opens with the smallest book on the page.
   const [sort, setSort] = React.useState<{ key: SortKey; dir: SortDir }>({ key: "size", dir: "desc" });
   const [open, setOpen] = React.useState<string | null>(null);
+  // A sub-cut served beside the sidecar (a bank's book), fetched the first time its row opens.
+  const [fetched, setFetched] = React.useState<Record<string, import("@/lib/table").CutTable | null>>({});
+  React.useEffect(() => {
+    const row = table.parts.find((p) => p.entity === open);
+    const stem = row?.sub_cut;
+    if (!stem || !table.sub_cut_dir || all?.[stem] || stem in fetched) return;
+    let live = true;
+    loadSubTable(table.sub_cut_dir, stem).then((t) => { if (live) setFetched((f) => ({ ...f, [stem]: t })); });
+    return () => { live = false; };
+  }, [open, table, all, fetched]);
   // §21.4: why a cell is empty, or what a value is net of — shown on hover, and on tap (phones
   // have no hover), as one line under the table. The sentence arrives rendered from Python.
   const [peek, setPeek] = React.useState<string | null>(null);
@@ -646,7 +677,8 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
   function pickRow(row: import("@/lib/table").CutRow, col?: ColKey) {
     const has = (c: ColKey) => (row[c]?.series?.length ?? 0) > 1;
     const c = col && has(col) ? col : ROW_DEFAULT.find(has);
-    if (c && onPickCell) onPickCell({ stem: table.cut, entity: row.entity, col: c });
+    if (c && onPickCell) onPickCell({ stem: table.cut, entity: row.entity, col: c,
+                                      ...(all?.[table.cut] ? {} : { table }) });
   }
 
   // The first column of a group opens with a rule, so "vs the real economy" reads as its own block.
@@ -670,9 +702,13 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
     const live = (v.series?.length ?? 0) > 1;
     const tag = v.period_label
       ? <span style={{ fontSize: FS.micro, color: "var(--font-muted)", marginLeft: 3 }}>·{v.period_label}</span>
-      : null;
+      : row.small_base && (c === "growth" || c === "pace")
+        ? <span style={{ fontSize: FS.micro, color: "var(--font-muted)", marginLeft: 3 }}>·sb</span>
+        : null;
+    const quiet = row.small_base && (c === "growth" || c === "pace");
     return (
       <td key={c} title={v.note} style={{ ...NUM, ...groupRule(c), cursor: live ? "pointer" : "default",
+                           color: quiet ? "var(--font-muted)" : undefined,
                            background: lit(row, c) ? tint(color, 0.18) : undefined,
                            borderRadius: lit(row, c) ? R.sm : undefined,
                            textDecoration: live ? "underline" : undefined,
@@ -735,7 +771,10 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
             {cols.map((c) => numeric(table.total, c))}
           </tr>
           {parts.map((p) => {
-            const nested = p.sub_cut && all?.[p.sub_cut] && depth === 0 ? all[p.sub_cut] : null;
+            const served = !!(p.sub_cut && table.sub_cut_dir);
+            const nested = p.sub_cut && depth === 0
+              ? all?.[p.sub_cut] ?? (served ? fetched[p.sub_cut] ?? null : null) : null;
+            const opens = !!nested || (served && depth === 0);
             const isOpen = open === p.entity;
             return (
               <React.Fragment key={p.entity ?? "_"}>
@@ -743,16 +782,16 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
                     style={{ ...vars(color, tint(color, 0.07)), cursor: "pointer",
                              background: lit(p) ? tint(color, 0.12) : isOpen ? tint(color, 0.07) : undefined }}>
                   <td style={{ ...NUM, textAlign: "left" }}>
-                    {nested ? (
+                    {opens ? (
                       <button onClick={(e) => {
                                 e.stopPropagation();
                                 setOpen(isOpen ? null : p.entity);
-                                onExpand?.(isOpen ? null : (p.sub_cut ?? null));
+                                if (!served) onExpand?.(isOpen ? null : (p.sub_cut ?? null));
                               }}
                               className="rm-link" style={{ font: "inherit", color: "inherit" }}>
                         <span style={{ color, fontWeight: 700 }}>{isOpen ? "▾" : "▸"}</span> {p.label ?? p.entity}
                       </button>
-                    ) : (p.label ?? p.entity)}
+                    ) : <span style={{ paddingLeft: (p.indent ?? 0) * 16 }}>{p.label ?? p.entity}</span>}
                     {approxMark(p)}
                   </td>
                   {cols.map((c) => numeric(p, c))}
@@ -762,14 +801,22 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
                     the card said "Iron and Steel holds 69.0% of basic-metals credit" above a
                     chart of "Basic Metal 11.2% of industry"; now both are on screen, nested,
                     with the denominator stated rather than implied. */}
+                {isOpen && opens && !nested && (
+                  <tr><td colSpan={cols.length + 1} style={{ ...TEXT.meta, padding: "6px 24px 12px" }}>
+                    {served && p.sub_cut && fetched[p.sub_cut] === null
+                      ? "This bank's book could not be opened." : "Opening…"}
+                  </td></tr>
+                )}
                 {isOpen && nested && (
                   <tr>
                     <td colSpan={cols.length + 1} style={{ padding: "0 10px 14px" }}>
                       <div style={{ paddingLeft: 14, borderLeft: `2px solid ${tint(color, 0.4)}` }}>
                         <div style={{ ...EYEBROW, margin: "8px 0 6px" }}>
-                          Inside {p.entity} · shares below are of {p.entity}
+                          {nested.level === "book"
+                            ? <>{p.label ?? p.entity}&apos;s book · shares below are of its own credit</>
+                            : <>Inside {p.label ?? p.entity} · shares below are of {p.label ?? p.entity}</>}
                         </div>
-                        <CutTable table={nested} title={p.entity ?? ""} color={color}
+                        <CutTable table={nested} title={p.label ?? p.entity ?? ""} color={color}
                                   all={all} depth={depth + 1} active={active} onPickCell={onPickCell} />
                       </div>
                     </td>
@@ -791,9 +838,9 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
       {/* §17.6 — what each share column divides by, always in view (a phone has no hover), with
           the table's top row as the example. Rendered in Python; the guard checks its numbers.
           Where a key line already states the coverage, the caveat below does not repeat it. */}
-      {table.key?.length ? (
+      {table.key?.length || table.notes?.length ? (
         <div style={{ ...TEXT.meta, marginTop: 8, lineHeight: 1.5 }}>
-          {table.key.map((l) => <p key={l} style={{ margin: 0 }}>{l}</p>)}
+          {[...(table.key ?? []), ...(table.notes ?? [])].map((l) => <p key={l} style={{ margin: 0 }}>{l}</p>)}
         </div>
       ) : null}
       {(showCoverage || footer) && (

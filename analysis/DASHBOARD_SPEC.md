@@ -1299,7 +1299,16 @@ cell chart. The same shell and parts as payments; no bespoke component.
 - **Rows keyed by roster id are drawn by `label`** (`core.banks.display`, one rule plus `short` overrides).
 - **Columns a table declares**: `gnpa` (all credit, by bank), `of_book` (a line's share of each bank's own
   book), `new` where a bank allocation is stored. Payments' by-bank tables gained `new` the same way (7 of 26).
-- **`unsortable`**: growth is not sortable on bank-wise by-bank tables until the minimum-base rule.
+- **Minimum base (built 2026-11-20, DECISIONS):** every by-bank table, both pipelines, marks a bank whose book
+  a year earlier was under 0.25% of the total (`small_base`, `core/bank_tables`). Its growth and pace show
+  muted with `·sb` and sort after the ranked banks; the rule is a visible line under the table (`notes`).
+  `unsortable` stays as a generic field; no table sets it now.
+- **Pace on bank rows** (2026-11-20): `csv_bank_acceleration`, both pipelines (DECISIONS: pairing rule).
+- **A bank opens into its own book** (2026-11-20): on all credit, each bank row's ▸ fetches
+  `{pipeline}_banks/book/{bank}.json` (the table declares `sub_cut_dir`); lines from the cuts module's `BOOK`,
+  retail's parts indented (`indent`) and sorted under it. Non-food is left out: it is the sectors added up.
+- **Markers** (2026-11-20): a row's `markers` name a declared merger (dashed line on the chart at the first
+  reading after it, sentence under the chart) or a quarter RBI flagged (sentence only; the point is a gap).
 - **Shared fixes made on the way:** a by-bank view's band is its measure's own (it fell back to the anchor);
   a chart over more than 12 rows offers the 8 largest as compare chips and folds the rest; the band's
   subline reads "every release", not "every month".

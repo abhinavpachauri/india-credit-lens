@@ -381,6 +381,68 @@
       "lifecycle": "conditional",
       "distortion": false,
       "note": "Targets only products with an instance (Shipping, 2026-11-13); add a product when a force instance needs it, since every target pairs with every other in the cross-source candidates (R2)."
+    },
+    {
+      "id": "ch_ownership_recategorisation",
+      "label": "Bank ownership recategorised → group shares move with no lending",
+      "driver_type": "policy_action",
+      "source_concept": "policy:bank_recategorisation",
+      "target_concepts": [
+        {
+          "product": "bank_credit"
+        }
+      ],
+      "mechanism": "When the regulator moves a bank from one ownership group to another, the bank's whole book leaves one group and joins the other on the effective date. Each group's size, share and growth a year step by that book with no lending behind them; the system total is unchanged.",
+      "polarity": "~",
+      "lifecycle": "permanent",
+      "distortion": true
+    },
+    {
+      "id": "ch_bank_amalgamation_book_transfer",
+      "label": "Bank amalgamation → book moves between banks",
+      "driver_type": "policy_action",
+      "source_concept": "policy:bank_amalgamation",
+      "target_concepts": [
+        {
+          "product": "bank_credit"
+        }
+      ],
+      "mechanism": "An amalgamation moves the absorbed banks' books into the absorbing bank on the effective date. The absorbing bank's size jumps and its growth across the date measures the merger, not lending; a merger between banks leaves the system total unchanged, while a non-bank lender merged into a bank adds its book to bank credit.",
+      "polarity": "~",
+      "lifecycle": "permanent",
+      "distortion": true
+    },
+    {
+      "id": "ch_bank_capital_injection",
+      "label": "Capital injected into banks → lending capacity",
+      "driver_type": "policy_action",
+      "source_concept": "policy:capital_injection",
+      "target_concepts": [
+        {
+          "product": "bank_credit",
+          "lender": "psb"
+        }
+      ],
+      "mechanism": "Capital put into banks by their owner lifts their capital ratios above the regulatory floor, so they can hold more risk-weighted loans and resume lending they had held back to conserve capital.",
+      "polarity": "+",
+      "lifecycle": "conditional",
+      "distortion": false
+    },
+    {
+      "id": "ch_supervisory_lending_restriction",
+      "label": "Supervisory restriction → banks conserve capital and lend less",
+      "driver_type": "policy_action",
+      "source_concept": "policy:supervisory_restriction",
+      "target_concepts": [
+        {
+          "product": "bank_credit",
+          "lender": "psb"
+        }
+      ],
+      "mechanism": "A bank placed under a supervisory corrective framework is steered away from riskier lending and toward conserving capital until its ratios recover, so its credit grows slower than its peers' while the restriction lasts.",
+      "polarity": "-",
+      "lifecycle": "conditional",
+      "distortion": false
     }
   ]
 }

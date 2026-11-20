@@ -63,6 +63,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-bank-acceleration",
         "cc-bank-allocation",
         "cc-bank-divergence",
         "cc-bank-momentum",
@@ -115,6 +116,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-bank-acceleration",
         "dc-bank-allocation",
         "dc-bank-divergence",
         "dc-bank-momentum",
@@ -232,6 +234,7 @@
       "data_series": null,
       "signal_ids": [
         "bharat-qr-abs",
+        "bharat-qr-bank-acceleration",
         "bharat-qr-bank-allocation",
         "bharat-qr-bank-momentum",
         "bharat-qr-bank-scan",
@@ -280,6 +283,7 @@
       "signal_ids": [
         "micro-atm-yoy",
         "micro-atms-abs",
+        "micro-atms-bank-acceleration",
         "micro-atms-bank-allocation",
         "micro-atms-bank-momentum",
         "micro-atms-bank-scan",
@@ -325,6 +329,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "pos-bank-acceleration",
         "pos-bank-allocation",
         "pos-bank-divergence",
         "pos-bank-momentum",
@@ -379,6 +384,7 @@
       "signal_ids": [
         "upi-bharat-qr-ratio",
         "upi-qr-abs",
+        "upi-qr-bank-acceleration",
         "upi-qr-bank-allocation",
         "upi-qr-bank-momentum",
         "upi-qr-bank-scan",
@@ -427,6 +433,7 @@
       "data_series": null,
       "signal_ids": [
         "atm-offsite-abs",
+        "atm-offsite-bank-acceleration",
         "atm-offsite-bank-allocation",
         "atm-offsite-bank-momentum",
         "atm-offsite-bank-scan",
@@ -474,6 +481,7 @@
       "data_series": null,
       "signal_ids": [
         "atm-onsite-abs",
+        "atm-onsite-bank-acceleration",
         "atm-onsite-bank-allocation",
         "atm-onsite-bank-momentum",
         "atm-onsite-bank-scan",
@@ -619,6 +627,7 @@
         "cc-atm-val-abs",
         "cc-atm-val-share",
         "cc-atm-val-yoy",
+        "cc-atm-withdrawal-val-bank-acceleration",
         "cc-atm-withdrawal-val-bank-allocation",
         "cc-atm-withdrawal-val-bank-momentum",
         "cc-atm-withdrawal-val-bank-scan",
@@ -664,6 +673,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-ecom-txn-val-bank-acceleration",
         "cc-ecom-txn-val-bank-allocation",
         "cc-ecom-txn-val-bank-momentum",
         "cc-ecom-txn-val-bank-scan",
@@ -712,6 +722,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-other-txn-val-bank-acceleration",
         "cc-other-txn-val-bank-allocation",
         "cc-other-txn-val-bank-momentum",
         "cc-other-txn-val-bank-scan",
@@ -760,6 +771,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-pos-txn-val-bank-acceleration",
         "cc-pos-txn-val-bank-allocation",
         "cc-pos-txn-val-bank-momentum",
         "cc-pos-txn-val-bank-scan",
@@ -811,6 +823,7 @@
         "dc-atm-val-abs",
         "dc-atm-val-share",
         "dc-atm-val-yoy",
+        "dc-atm-withdrawal-val-bank-acceleration",
         "dc-atm-withdrawal-val-bank-allocation",
         "dc-atm-withdrawal-val-bank-momentum",
         "dc-atm-withdrawal-val-bank-scan",
@@ -856,6 +869,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-ecom-txn-val-bank-acceleration",
         "dc-ecom-txn-val-bank-allocation",
         "dc-ecom-txn-val-bank-momentum",
         "dc-ecom-txn-val-bank-scan",
@@ -904,6 +918,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-other-txn-val-bank-acceleration",
         "dc-other-txn-val-bank-allocation",
         "dc-other-txn-val-bank-momentum",
         "dc-other-txn-val-bank-scan",
@@ -952,6 +967,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-pos-txn-val-bank-acceleration",
         "dc-pos-txn-val-bank-allocation",
         "dc-pos-txn-val-bank-momentum",
         "dc-pos-txn-val-bank-scan",
@@ -1001,6 +1017,7 @@
       "data_series": null,
       "signal_ids": [
         "dc-pos-withdrawal-val-abs",
+        "dc-pos-withdrawal-val-bank-acceleration",
         "dc-pos-withdrawal-val-bank-allocation",
         "dc-pos-withdrawal-val-bank-momentum",
         "dc-pos-withdrawal-val-bank-scan",
@@ -1148,6 +1165,7 @@
         "cc-atm-vol-share",
         "cc-atm-vol-streak",
         "cc-atm-vol-yoy",
+        "cc-atm-withdrawal-vol-bank-acceleration",
         "cc-atm-withdrawal-vol-bank-allocation",
         "cc-atm-withdrawal-vol-bank-momentum",
         "cc-atm-withdrawal-vol-bank-scan",
@@ -1193,6 +1211,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-ecom-txn-vol-bank-acceleration",
         "cc-ecom-txn-vol-bank-allocation",
         "cc-ecom-txn-vol-bank-momentum",
         "cc-ecom-txn-vol-bank-scan",
@@ -1241,6 +1260,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-other-txn-vol-bank-acceleration",
         "cc-other-txn-vol-bank-allocation",
         "cc-other-txn-vol-bank-momentum",
         "cc-other-txn-vol-bank-scan",
@@ -1289,6 +1309,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-pos-txn-vol-bank-acceleration",
         "cc-pos-txn-vol-bank-allocation",
         "cc-pos-txn-vol-bank-momentum",
         "cc-pos-txn-vol-bank-scan",
@@ -1341,6 +1362,7 @@
         "dc-atm-vol-share",
         "dc-atm-vol-streak",
         "dc-atm-vol-yoy",
+        "dc-atm-withdrawal-vol-bank-acceleration",
         "dc-atm-withdrawal-vol-bank-allocation",
         "dc-atm-withdrawal-vol-bank-momentum",
         "dc-atm-withdrawal-vol-bank-scan",
@@ -1386,6 +1408,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-ecom-txn-vol-bank-acceleration",
         "dc-ecom-txn-vol-bank-allocation",
         "dc-ecom-txn-vol-bank-momentum",
         "dc-ecom-txn-vol-bank-scan",
@@ -1434,6 +1457,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-other-txn-vol-bank-acceleration",
         "dc-other-txn-vol-bank-allocation",
         "dc-other-txn-vol-bank-momentum",
         "dc-other-txn-vol-bank-scan",
@@ -1482,6 +1506,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-pos-txn-vol-bank-acceleration",
         "dc-pos-txn-vol-bank-allocation",
         "dc-pos-txn-vol-bank-momentum",
         "dc-pos-txn-vol-bank-scan",
@@ -1531,6 +1556,7 @@
       "data_series": null,
       "signal_ids": [
         "dc-pos-withdrawal-vol-abs",
+        "dc-pos-withdrawal-vol-bank-acceleration",
         "dc-pos-withdrawal-vol-bank-allocation",
         "dc-pos-withdrawal-vol-bank-momentum",
         "dc-pos-withdrawal-vol-bank-scan",

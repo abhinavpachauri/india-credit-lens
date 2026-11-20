@@ -6,8 +6,11 @@
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
     "skeleton_node_count": 13,
     "skeleton_generated_by": "analysis/generate_skeleton.py",
-    "behavioral_status": "deferred",
-    "behavioral_deferred_reason": "Forces are authored in the bank-wise FOUNDATION model pass, after the Banks view ships (BANKWISE_SPEC §8a, user 2026-11-17): the mergers, IDBI's recategorisation and recapitalisation are the first candidates."
+    "mode": "foundation",
+    "last_foundation_date": "2026-06-30",
+    "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
+    "last_updated": "2026-11-20",
+    "update_note": "2026-11-20 first FOUNDATION pass (Jun 2026 data, after the Banks view shipped; BANKWISE_SPEC §8a). Six forces, each sourced on an official page read in the editor's Chrome: IDBI's recategorisation (Jan 2019), the 2020 PSB consolidation, HDFC Ltd into HDFC Bank (Jul 2023), PSB recapitalisation (Oct 2017), Prompt Corrective Action on weak PSBs (Apr 2017), and the Nov 2023 unsecured risk weights (shared with SIBC). Four new channels in the ontology. Not yet sourced: the other bank mergers declared as series breaks (Kotak/ING Vysya, SBI associates, Bank of Baroda/Dena/Vijaya, DBS/Lakshmi Vilas). Finding: no series break is declared for the bank groups at IDBI's move, so group growth a year to Dec 2019 carries it. No loops, risks or gaps authored: the lens is banks, and no relationship test has run on this pipeline."
   },
   "nodes": [
     {
@@ -27,6 +30,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-gross-bank-acceleration",
         "bw-gross-bank-allocation",
         "bw-gross-bank-momentum",
         "bw-gross-bank-scan",
@@ -72,6 +76,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-food-bank-acceleration",
         "bw-food-bank-allocation",
         "bw-food-bank-momentum",
         "bw-food-bank-scan",
@@ -118,6 +123,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-non-food-bank-acceleration",
         "bw-non-food-bank-allocation",
         "bw-non-food-bank-momentum",
         "bw-non-food-bank-scan",
@@ -164,6 +170,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-agri-bank-acceleration",
         "bw-agri-bank-allocation",
         "bw-agri-bank-momentum",
         "bw-agri-bank-scan",
@@ -210,6 +217,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-industry-bank-acceleration",
         "bw-industry-bank-allocation",
         "bw-industry-bank-momentum",
         "bw-industry-bank-scan",
@@ -256,6 +264,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-other-non-food-bank-acceleration",
         "bw-other-non-food-bank-allocation",
         "bw-other-non-food-bank-momentum",
         "bw-other-non-food-bank-scan",
@@ -302,6 +311,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-retail-bank-acceleration",
         "bw-retail-bank-allocation",
         "bw-retail-bank-momentum",
         "bw-retail-bank-scan",
@@ -348,6 +358,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-services-bank-acceleration",
         "bw-services-bank-allocation",
         "bw-services-bank-momentum",
         "bw-services-bank-scan",
@@ -394,6 +405,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-cards-bank-acceleration",
         "bw-cards-bank-allocation",
         "bw-cards-bank-momentum",
         "bw-cards-bank-scan",
@@ -440,6 +452,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-education-bank-acceleration",
         "bw-education-bank-allocation",
         "bw-education-bank-momentum",
         "bw-education-bank-scan",
@@ -486,6 +499,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-housing-bank-acceleration",
         "bw-housing-bank-allocation",
         "bw-housing-bank-momentum",
         "bw-housing-bank-scan",
@@ -532,6 +546,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-other-retail-bank-acceleration",
         "bw-other-retail-bank-allocation",
         "bw-other-retail-bank-momentum",
         "bw-other-retail-bank-scan",
@@ -578,6 +593,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "bw-vehicle-bank-acceleration",
         "bw-vehicle-bank-allocation",
         "bw-vehicle-bank-momentum",
         "bw-vehicle-bank-scan",
@@ -716,8 +732,267 @@
       "polarity": "structural",
       "scope": "intra_group",
       "decomposition": "primary"
+    },
+    {
+      "from": "force_idbi_recategorisation",
+      "to": "e_credit_gross",
+      "type": "drives",
+      "polarity": "~",
+      "scope": "inter_group",
+      "mechanism": "Moves IDBI Bank's book from the public to the private group on the day: group shares and group growth step with no lending; the total is unchanged",
+      "id": "force_idbi_recategorisation__drives__e_credit_gross",
+      "channel": "ch_ownership_recategorisation"
+    },
+    {
+      "from": "force_psb_amalgamation_2020",
+      "to": "e_credit_gross",
+      "type": "drives",
+      "polarity": "~",
+      "scope": "inter_group",
+      "mechanism": "Moves six banks' books into four absorbing banks: per-bank size steps and per-bank growth across the date is the merger; group and total unchanged",
+      "id": "force_psb_amalgamation_2020__drives__e_credit_gross",
+      "channel": "ch_bank_amalgamation_book_transfer"
+    },
+    {
+      "from": "force_hdfc_ltd_merger",
+      "to": "e_credit_housing",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "A housing finance company's loans become bank housing credit on the day: reported growth a year across July 2023 is the merger, not new lending",
+      "id": "force_hdfc_ltd_merger__drives__e_credit_housing",
+      "channel": "ch_bank_amalgamation_book_transfer"
+    },
+    {
+      "from": "force_hdfc_ltd_merger",
+      "to": "e_credit_gross",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "The non-bank's whole book becomes bank credit on the day, lifting all banks' credit with no new lending",
+      "id": "force_hdfc_ltd_merger__drives__e_credit_gross",
+      "channel": "ch_bank_amalgamation_book_transfer"
+    },
+    {
+      "from": "force_psb_recapitalisation_2017",
+      "to": "e_credit_gross",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "Capital infused into public sector banks lifts their capacity to lend; read through the public sector group's growth against the private group's",
+      "id": "force_psb_recapitalisation_2017__drives__e_credit_gross",
+      "channel": "ch_bank_capital_injection"
+    },
+    {
+      "from": "force_pca_psb_restrictions",
+      "to": "e_credit_gross",
+      "type": "suppresses",
+      "polarity": "-",
+      "scope": "inter_group",
+      "mechanism": "Restricted public sector banks conserve capital and hold back lending; read through the public sector group's growth and share against the private group's",
+      "id": "force_pca_psb_restrictions__suppresses__e_credit_gross",
+      "channel": "ch_supervisory_lending_restriction"
+    },
+    {
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_credit_cards",
+      "type": "suppresses",
+      "polarity": "-",
+      "scope": "inter_group",
+      "mechanism": "A higher risk weight on card receivables raises the capital cost per rupee of card credit at every bank",
+      "id": "force_rbi_unsecured_tightening__suppresses__e_credit_cards",
+      "channel": "ch_capital_weight_unsecured"
+    },
+    {
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_credit_other_retail",
+      "type": "suppresses",
+      "polarity": "-",
+      "scope": "inter_group",
+      "mechanism": "A higher risk weight on unsecured consumer credit raises the capital cost of other retail lending",
+      "id": "force_rbi_unsecured_tightening__suppresses__e_credit_other_retail",
+      "channel": "ch_capital_weight_unsecured"
     }
   ],
-  "force_instances": [],
+  "force_instances": [
+    {
+      "id": "force_idbi_recategorisation",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "IDBI Bank recategorised as a private sector bank (Jan 2019)",
+      "description": "RBI moved IDBI Bank from the public to the private sector group for regulatory purposes once LIC held 51% of it. Its whole book left the public sector group and joined the private one on the effective date, so the two groups' size, share and growth a year step by IDBI's book with no lending behind them. All banks' credit is unchanged.",
+      "non_observable_reason": "A regulatory categorisation decision; the CSV carries only the group a bank was printed under each quarter",
+      "claim_type": "inference",
+      "domain": "credit_headline",
+      "signal_evidence": [
+        "bw-gross-category-share-scan",
+        "bw-gross-category-yoy-scan",
+        "bw-gross-category-allocation"
+      ],
+      "source": "RBI press release 2018-2019/2194, 'Re-categorization of IDBI Bank Ltd. as a Private Sector Bank', 14 March 2019",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=46552",
+      "source_verified_date": "2026-11-20",
+      "source_excerpt": "IDBI Bank Limited has been categorized as a ‘Private Sector Bank’ for regulatory purposes by Reserve Bank of India with effect from January 21, 2019 consequent upon Life Insurance Corporation of India acquiring 51% of the total paid-up equity share capital of the bank.",
+      "source_rationale": "Verified verbatim in the editor's Chrome, 2026-11-20. Effective date from the release. Finding on the way: the group series are sums of banks as RBI printed them each quarter, and no series break is declared for the two groups at Jan 2019, so their growth a year to Dec 2019 still carries IDBI's move (a follow-up for series_breaks.json, not decided here).",
+      "status": "active",
+      "instance_of": "ch_ownership_recategorisation",
+      "scope_entities": [
+        "icl:rbi_bankwise/credit/gross"
+      ],
+      "timing_rule": "relabelling",
+      "starts": "2019-01-21",
+      "delay_months": 0,
+      "fades_after_months": 12
+    },
+    {
+      "id": "force_psb_amalgamation_2020",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "Ten public sector banks consolidated into four (Apr 2020)",
+      "description": "The Government amalgamated Oriental Bank of Commerce and United Bank of India into Punjab National Bank, Syndicate Bank into Canara Bank, Andhra Bank and Corporation Bank into Union Bank of India, and Allahabad Bank into Indian Bank, effective 1 April 2020. Each absorbing bank's book jumps by the absorbed books on that date; its growth across the date measures the merger. The public sector group and the system total are unchanged, because every bank involved was in that group.",
+      "non_observable_reason": "A Cabinet decision and scheme of amalgamation; the CSV shows only each bank's book before and after",
+      "claim_type": "inference",
+      "domain": "credit_headline",
+      "signal_evidence": [
+        "bw-gross-bank-yoy-scan",
+        "bw-gross-bank-share-scan",
+        "bw-gross-bank-scan"
+      ],
+      "source": "PIB, Cabinet, 'Cabinet approves Mega Consolidation in Public Sector Banks {PSBs} with effect from 1.4.2020', 4 March 2020",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1605147&reg=3&lang=2",
+      "source_verified_date": "2026-11-20",
+      "source_excerpt": "The amalgamation would be effective from 1.4.2020 and would result in creation of seven large PSBs with scale and national reach with each amalgamated entity having a business of over Rupees Eight lakh crore.",
+      "source_rationale": "Verified verbatim in the editor's Chrome, 2026-11-20. Already declared as series break psb_amalgamations_2020 (growth across it is merger_break); this force is the cause of that break. The other bank mergers in series_breaks.json (Kotak/ING Vysya 2015, SBI associates 2017, Bank of Baroda/Dena/Vijaya 2019, DBS/Lakshmi Vilas) are not yet sourced as forces.",
+      "status": "active",
+      "instance_of": "ch_bank_amalgamation_book_transfer",
+      "scope_entities": [
+        "icl:rbi_bankwise/credit/gross"
+      ],
+      "timing_rule": "relabelling",
+      "starts": "2020-04-01",
+      "delay_months": 0,
+      "fades_after_months": 12
+    },
+    {
+      "id": "force_hdfc_ltd_merger",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "HDFC Ltd merged into HDFC Bank (Jul 2023)",
+      "description": "HDFC Limited, a housing finance company, merged into HDFC Bank on 1 July 2023. Its loans, mostly housing, became bank credit on that date, so all banks' credit, housing loans, the private sector group and HDFC Bank each step up by a book that was lent before, by a non-bank. Growth a year across the date measures the merger.",
+      "non_observable_reason": "A merger of a non-bank into a bank; the CSV shows the bank's book after it, not the non-bank's before",
+      "claim_type": "inference",
+      "domain": "retail",
+      "signal_evidence": [
+        "bw-housing-yoy",
+        "bw-gross-yoy",
+        "bw-housing-category-yoy-scan",
+        "bw-housing-bank-yoy-scan"
+      ],
+      "source": "RBI press release 2023-2024/1556, 'RBI releases 2023 list of Domestic Systemically Important Banks (D-SIBs)', 28 December 2023",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=57006",
+      "source_verified_date": "2026-11-20",
+      "source_excerpt": "factoring in the increased systemic importance of HDFC Bank post the merger of erstwhile HDFC Limited into HDFC Bank on July 1, 2023",
+      "source_rationale": "Verified verbatim in the editor's Chrome, 2026-11-20. RBI published no standalone release on the merger; this release states the effective date on an official RBI page. The size of the step is in the data (series break hdfc_ltd_2023, verified on the saved quarters 2026-11-17). SIBC treats the same event as a series break.",
+      "status": "active",
+      "instance_of": "ch_bank_amalgamation_book_transfer",
+      "scope_entities": [
+        "icl:rbi_bankwise/credit/gross",
+        "icl:rbi_bankwise/credit/housing"
+      ],
+      "timing_rule": "relabelling",
+      "starts": "2023-07-01",
+      "delay_months": 0,
+      "fades_after_months": 12
+    },
+    {
+      "id": "force_psb_recapitalisation_2017",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "Recapitalisation of public sector banks, ₹2.11 lakh crore (Oct 2017)",
+      "description": "The Government announced in October 2017 that it would recapitalise public sector banks by ₹2.11 lakh crore through its own infusion and capital the banks raised from markets, with infusions through 2017-18 and 2018-19. Capital above the regulatory floor lets the banks hold more loans, so public sector credit can recover its pace relative to private banks once the capital lands.",
+      "non_observable_reason": "A fiscal decision on bank capital; the CSV holds credit, not the capital infused",
+      "claim_type": "inference",
+      "domain": "credit_headline",
+      "signal_evidence": [
+        "bw-gross-category-yoy-scan",
+        "bw-gross-category-acceleration",
+        "bw-gross-bank-yoy-scan"
+      ],
+      "source": "PIB, Ministry of Finance, 'Recapitalisation of Public Sector Banks (PSBs)', 14 December 2018",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1556008&reg=48&lang=2",
+      "source_verified_date": "2026-11-20",
+      "source_excerpt": "Government of India (GoI) announced recapitalisation of Public Sector Banks (PSBs) to the tune of Rs. 2.11 lakh crore in October 2017, through infusion of capital by the Government and raising of capital by banks from the markets.",
+      "source_rationale": "Verified verbatim in the editor's Chrome, 2026-11-20. The source dates the announcement to a month, so `starts` is 1 Oct 2017; infusions ran through FY 2017-18 and FY 2018-19 (the same release lists them by bank), so the capital_cost rule (3 months, visible 24) is a lower bound on the window. The causal claim (capital → lending) is the channel's mechanism, not the release's words.",
+      "status": "active",
+      "instance_of": "ch_bank_capital_injection",
+      "scope_entities": [
+        "icl:rbi_bankwise/credit/gross"
+      ],
+      "timing_rule": "capital_cost",
+      "starts": "2017-10-01",
+      "delay_months": 3,
+      "fades_after_months": 24
+    },
+    {
+      "id": "force_pca_psb_restrictions",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "Prompt Corrective Action on weak public sector banks (2017 →)",
+      "description": "RBI's revised Prompt Corrective Action framework (13 April 2017) placed banks breaching capital, asset-quality or profitability thresholds under supervisory restrictions that steer them away from riskier lending and toward conserving capital. Several public sector banks were under it from 2017 until they were taken out between 2019 and 2022, so their credit grew slower than their peers' while it lasted.",
+      "non_observable_reason": "A supervisory action; the CSV holds the banks' credit, not which banks were restricted",
+      "claim_type": "inference",
+      "domain": "credit_headline",
+      "signal_evidence": [
+        "bw-gross-category-yoy-scan",
+        "bw-gross-category-share-scan",
+        "bw-gross-bank-yoy-scan"
+      ],
+      "source": "RBI press release 2016-2017/3288, 'RBI Clarification on Banks under Prompt Corrective Action', 5 June 2017",
+      "source_url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=40668",
+      "source_verified_date": "2026-11-20",
+      "source_excerpt": "The PCA framework is, thus, intended to encourage banks to eschew certain riskier activities and focus on conserving capital so that their balance sheets can become stronger.",
+      "source_rationale": "Verified verbatim in the editor's Chrome, 2026-11-20; the same release dates the revised guidelines to April 13, 2017. Exits are dated in RBI releases (e.g. Bank of India, Bank of Maharashtra and Oriental Bank of Commerce on 31 Jan 2019, prid=46165, read the same day). The capital_cost rule's 24-month window is shorter than the restriction lasted for some banks; a per-bank start and end is the honest timing and is not modelled yet.",
+      "status": "active",
+      "instance_of": "ch_supervisory_lending_restriction",
+      "scope_entities": [
+        "icl:rbi_bankwise/credit/gross"
+      ],
+      "timing_rule": "capital_cost",
+      "starts": "2017-04-13",
+      "delay_months": 3,
+      "fades_after_months": 24
+    },
+    {
+      "id": "force_rbi_unsecured_tightening",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "RBI risk-weight hike on unsecured credit (Nov 2023)",
+      "description": "RBI raised risk weights on banks' consumer credit, excluding housing, education, vehicle and gold loans, from 100% to 125%, and on credit card receivables from 125% to 150%, in November 2023. The extra capital per rupee lent slows card and other unsecured retail lending at every bank.",
+      "non_observable_reason": "A regulatory circular; not a column in the bank-wise CSV",
+      "claim_type": "inference",
+      "domain": "retail",
+      "signal_evidence": [
+        "bw-cards-yoy",
+        "bw-cards-category-yoy-scan",
+        "bw-other-retail-yoy",
+        "bw-other-retail-category-yoy-scan"
+      ],
+      "source": "RBI/2023-24/85 DOR.STR.REC.57/21.06.001/2023-24, 'Regulatory measures towards consumer credit and bank credit to NBFCs', 16 November 2023",
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12567&Mode=0",
+      "source_verified_date": "2026-09-09",
+      "source_excerpt": "it has been decided to increase the risk weights in respect of consumer credit exposure of commercial banks (outstanding as well as new), including personal loans, but excluding housing loans, education loans, vehicle loans and loans secured by gold and gold jewellery, by 25 percentage points to 125%",
+      "source_rationale": "The same instance as SIBC's force_rbi_unsecured_tightening (verified there 2026-09-09, machine-verified excerpt), attached here to the bank-wise card and other-retail lines it touches; one source, one channel, two pipelines.",
+      "status": "active",
+      "instance_of": "ch_capital_weight_unsecured",
+      "scope_entities": [
+        "icl:rbi_bankwise/credit/cards",
+        "icl:rbi_bankwise/credit/other_retail"
+      ],
+      "timing_rule": "capital_cost",
+      "starts": "2023-11-16",
+      "delay_months": 3,
+      "fades_after_months": 24
+    }
+  ],
   "loops": []
 }

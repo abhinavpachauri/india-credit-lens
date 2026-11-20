@@ -295,6 +295,276 @@
       "rule": "R2_shared_channel",
       "type": "co_driven",
       "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_amalgamation_book_transfer",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_bank_amalgamation_book_transfer",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_amalgamation_book_transfer",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_bank_capital_injection",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_bank_capital_injection",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_bank_capital_injection",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
       "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:atm_pos/cards/credit_cards",
       "to": "icl:nbfc//4.4",
@@ -2470,6 +2740,141 @@
       "rule": "R2_shared_channel",
       "type": "co_driven",
       "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_ownership_recategorisation",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_ownership_recategorisation",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_ownership_recategorisation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
       "group": "R2:ch_policy_rate_retail_pricing",
       "from": "icl:rbi_bankwise/credit/other_retail",
       "to": "icl:nbfc//4",
@@ -3034,6 +3439,141 @@
         "product_b": "housing"
       },
       "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/gross",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/I",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/III",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_supervisory_lending_restriction",
+      "from": "icl:rbi_bankwise/credit/other_non_food",
+      "to": "icl:sibc/Statement1/ix",
+      "shared": {
+        "channel": "ch_supervisory_lending_restriction",
+        "product_a": "bank_credit",
+        "product_b": "bank_credit"
+      },
+      "rationale": "both products are targets of channel ch_supervisory_lending_restriction",
       "status": "candidate"
     },
     {

@@ -50,3 +50,14 @@ ANCHORS = ["gross-category"]
 
 #: No dimension here has a rate without a split.
 STATE_RATE_ONLY: list = []
+
+#: Each bank's own book (BANKWISE_SPEC §8b gap 2): the lines a bank row opens into, read by
+#: `core/bank_tables.books`. The four sectors with retail's parts under it, then the accounting
+#: lines; non-food is left out because it is the four sectors and other non-food added up.
+_BOOK = [("agri", 0), ("industry", 0), ("services", 0), ("retail", 0), ("housing", 1),
+         ("other_retail", 1), ("vehicle", 1), ("education", 1), ("cards", 1),
+         ("food", 0), ("other_non_food", 0)]
+_METRIC = {n["code"]: n["metric"] for n in _NODES}
+BOOK = {"whole": _METRIC["gross"],
+        "lines": [{"metric": _METRIC[c], "label": TITLES[f"bw-{c.replace('_', '-')}-category"],
+                   "indent": i} for c, i in _BOOK]}

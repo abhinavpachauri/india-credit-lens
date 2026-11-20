@@ -320,11 +320,11 @@ def test_a_bank_breakout_is_a_cut_like_any_other():
         assert t.get("level") == "bank" and t.get("metric") == metric
         assert len(t["parts"]) == entry["parts"] > 20, \
             f"{metric}: the index says {entry['parts']} banks, the file has {len(t['parts'])}"
-        # A bank breakout stores no acceleration, so no pace column; its share of the new money
-        # is a column only where the bank allocation published one (`alloc` is withheld when
-        # banks moved against each other), and six columns of dashes would claim otherwise.
+        # Every bank carries its pace (DECISIONS 2026-11-20); its share of the new money is a
+        # column only where the bank allocation published one (`alloc` is withheld when banks
+        # moved against each other), and six columns of dashes would claim otherwise.
         cols = set(t["columns"])
-        assert {"size", "of_cut", "growth"} <= cols <= {"size", "of_cut", "growth", "new"}, \
+        assert {"size", "of_cut", "growth", "pace"} <= cols <= {"size", "of_cut", "growth", "pace", "new"}, \
             f"{metric} declares {sorted(cols)}"
         assert ("new" in cols) == any(p.get("new") for p in t["parts"]), \
             f"{metric}: a New column with no cell in it, or cells under no column"

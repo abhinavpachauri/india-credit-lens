@@ -221,7 +221,16 @@ after the view ships.
 **Timeline.** `analysis/rbi_bankwise/timeline.json` lists the saved quarters (written by
 consolidate from the releases); it is the freshness check's population.
 
-## 8b. Phase 5 gaps, to revisit (user, 2026-11-17: "document the gaps and we will revisit them in next sessions")
+## 8b. Phase 5 gaps (user, 2026-11-17), all five built 2026-11-20 (DASHBOARD_SPEC §20 "as built")
+
+Decided 2026-11-20 (user): a bank ranks by growth only off ≥ 0.25% of the total a year earlier, and pace
+is a generic per-bank family for both pipelines (DECISIONS). One correction to gap 5 as written: a flag
+touches growth and new money at its quarter and at the same quarter a year on (the two ends of a year's
+comparison), and pace at each of those and the quarter after; not "four later". 48 bank flags on the 13
+measures; none on Jun 2026. Built in `core/bank_tables.py`; the gate (`validate_cut_table`) reads every
+book file and accepts a "—" only where `inconsistencies.json` lists it.
+
+The original list:
 
 The Banks view was built on the shared read-mode parts; these departures from the approved draft are open:
 1. **Pace per bank** is not stored (`csv_bank_acceleration` does not exist; payments stores none either). The

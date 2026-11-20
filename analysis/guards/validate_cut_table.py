@@ -28,6 +28,7 @@ from core.traceability import DISTRIBUTION as POLICY, matches                  #
 from core import table_rows                                                   # noqa: E402
 from core import manifest                          # noqa: E402
 from core import absence, real_cells, table_columns                           # noqa: E402
+from core import bank_tables                                                  # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
@@ -119,6 +120,10 @@ def all_tables(pipeline: str) -> tuple[dict, str]:
             tables[entry["cut"]] = None            # reported below as a missing breakout
             continue
         tables[entry["cut"]] = json.loads(f.read_text())
+    # Each bank's own book (core/bank_tables.books), indexed the same way and checked the same way.
+    for bank, file in (doc.get("_books") or {}).items():
+        f = DATA / file
+        tables[f"book/{bank}"] = json.loads(f.read_text()) if f.exists() else None
     return tables, doc["_meta"]["period"]
 
 
@@ -195,8 +200,12 @@ def validate(pipeline: str, tables: dict | None = None) -> list[str]:
                                 f"'{pents.get('size', 'total')}' — the sum of the named parts")
             rows = [(table["total"], "(the cut itself)", pcols, table.get("parent_periods", {}),
                      lambda c: pents.get(c, "total"))]
-            rows += [(p, p.get("entity"), cols, table.get("periods", {}),
-                      lambda c, e=p.get("entity"): e) for p in table["parts"]]
+            # A bank's book: every row is a different signal for the same bank, so each row
+            # declares its own columns and every cell is read for that bank.
+            bank = table.get("bank")
+            rows += [(p, p.get("entity"), p.get("columns") or cols, table.get("periods", {}),
+                      (lambda c, b=bank: b) if bank else (lambda c, e=p.get("entity"): e))
+                     for p in table["parts"]]
             for row, who, colmap, periods, eid_of in rows:
                 for col in CELLS:
                     cell = row.get(col)
@@ -219,6 +228,15 @@ def validate(pipeline: str, tables: dict | None = None) -> list[str]:
                     # numbers back out of "\u20b95.38L Cr" would have to undo the unit
                     # conversion to compare, and a check that re-implements the formatter
                     # is a second formatter that can disagree with the first.
+                    if cell["sort"] is None and cell.get("reason") == "flagged_inconsistent":
+                        # Left out only where RBI's own record of failed checks lists it: on
+                        # the table's metric, or (a share of the book) on the book itself.
+                        den = reg.get(metric, {}).get("compute", {}).get("denominator_metric")
+                        if not any(bank_tables.is_flagged(pipeline, eid_of(col), m, period)
+                                   for m in (table.get("metric"), den) if m):
+                            findings.append(f"{stem} · {who} · {col}: drawn as flagged, but "
+                                            f"no flag is recorded for {eid_of(col)} at {period}")
+                        continue
                     if cell["sort"] is None:
                         findings.append(f"{stem} · {who} · {col}: drawn as '{cell['display']}' "
                                         f"with no value behind it")

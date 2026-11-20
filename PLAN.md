@@ -20,8 +20,9 @@ driver test, each line's delay found on earlier months and confirmed on later on
 - **Pooled driver test: built 11-10** (SYSTEM_MODEL_SPEC §16 Step 6d): all 6 SIBC families too_short
   (large-industry rate, 35 lines, r 0.20, ~13 more months). Next: pooled verdicts in the grid.
 - **Each bank's credit (user, 11-14): `rbi_bankwise`**, spec v0.2 reviewed and decided (`analysis/BANKWISE_SPEC.md`).
-  Phase 4 (signals + model) and phase 5 (Banks view on the SIBC page) built 11-17. **Next: the five view gaps the user
-  set aside (BANKWISE_SPEC §8b), then the FOUNDATION pass.** Payments onto the roster: separate (user).
+  Phases 4–5 built 11-17; the five view gaps (§8b) and the first FOUNDATION pass (6 sourced forces) built 11-20.
+  **Next:** a series break for the two bank groups at IDBI's move (Jan 2019: group growth to Dec 2019 still carries it);
+  source the four unsourced mergers as forces. Payments onto the roster: separate (user).
 - **Buyer first** (STRATEGY v3.1 §5): log who engages with X/LinkedIn, ask the 3 questions; a source is
   chosen by a buyer conversation and by the grid column it completes.
 
@@ -90,8 +91,6 @@ driver test, each line's delay found on earlier months and confirmed on later on
   test pinning which cards are superseded) is the cheap stopgap.
 - **PSL `weight` / `weight_now`** divide by the sum of non-additive parts. Changing it rewrites
   PSL's Layer 2 mix state, so it needs a decision, not a side effect.
-- **Bank growth off a negligible base** ranks first when sorted by growth (Bandhan +416,450% on
-  24,993 cards). A `min_base` rule is undecided.
 - **Generic card path vs table-as-the-L1-surface** (ARCHITECTURE item 3): decide from the count in Next #2.
 - **NBFC phases 7–8** (cross-source concepts, links, construct, channel UI) are deferred by the
   user until L1 is reviewed (NBFC plan D5).

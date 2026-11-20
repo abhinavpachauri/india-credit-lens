@@ -729,6 +729,40 @@ def csv_category_acceleration(params: dict, period: str, df: pd.DataFrame) -> li
     return out
 
 
+def csv_bank_acceleration(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Each bank's pace: the change in its growth a year since the previous period, in points.
+
+    The category method's math, run over banks (DECISIONS, "Every bank carries its pace"): a
+    bank table showed share and growth without pace, which the pairing rule forbids. Either
+    year-on-year comparison crossing a declared merger makes the pace absent with that reason,
+    never a number. Every bank is stored; the minimum-base rule selects at ranking time, in the
+    table stamp, because it is a selection rule, not a signal (signals/README).
+    """
+    metric = params["metric"]
+    rules  = params.get("status_rules") or ACCEL_DEFAULT_RULES
+    avail  = set(df["report_date"].unique())
+    prior  = _prior_period(period, avail)
+    if prior is None:
+        return []
+    back_now, back_prior = _month_back(period, 12, avail), _month_back(prior, 12, avail)
+    if back_now is None or back_prior is None:
+        return []
+    now, was = _bank_values(df, period, metric), _bank_values(df, back_now, metric)
+    pnow, pwas = _bank_values(df, prior, metric), _bank_values(df, back_prior, metric)
+    out = []
+    for bank in now:
+        if not was.get(bank) or not pwas.get(bank) or bank not in pnow:
+            continue                          # no growth at one end: no pace to state
+        why = _spans(df, bank, back_now, period) or _spans(df, bank, back_prior, prior)
+        if why:
+            out.append(_absent("bank", bank, why))
+            continue
+        a = (now[bank] - was[bank]) / was[bank] * 100
+        b = (pnow[bank] - pwas[bank]) / pwas[bank] * 100
+        out.append(_row("bank", bank, a - b, _eval_status(rules, a - b, 0.0), "pp"))
+    return out
+
+
 def csv_category_allocation(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """Where the new units went. `contribution` always; `alloc` only when coherent.
 
@@ -1115,6 +1149,7 @@ METHODS: dict = {
     "csv_category_scan_yoy":   csv_category_scan_yoy,
     "csv_category_momentum":   csv_category_momentum,
     "csv_category_acceleration": csv_category_acceleration,
+    "csv_bank_acceleration":     csv_bank_acceleration,
     "csv_category_allocation": csv_category_allocation,
     "csv_bank_divergence":     csv_bank_divergence,
     # story readings (signals/README.md): the movement family one level down, and the break flag

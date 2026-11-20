@@ -726,7 +726,9 @@ Emitted by `momentum`, consumed by `allocation`. Not its own registry signal.
   occasionally gets ignored; two totals side by side are self-explanatory.
 
 ### acceleration — is the speed itself changing
-`csv_sector_acceleration` (SIBC) · `csv_category_acceleration` (ATM/POS).
+`csv_sector_acceleration` (SIBC) · `csv_category_acceleration` (ATM/POS) · `csv_bank_acceleration`
+(per bank, payments and bank-wise, 2026-11-20; ids `{metric}-bank-acceleration`; either comparison
+across a declared merger makes it absent with `merger_break`).
 METHOD_TYPE: `acceleration`.
 
 - **Compute:** `delta_speed = yoy(period) - yoy(prior period)`, per entity. Unit `pp`.
@@ -809,7 +811,7 @@ METHOD_TYPE: `acceleration`.
 |---|---|---|
 | gap to market ("0.9% vs 9.1%") | **not a signal** | Two stored operands beat a subtraction no gate grounds (*Assessed and NOT added*, above). The posts already quote both. Story *ranking* may compute it; nothing publishes it. |
 | remainder ("everyone else 6.6%") | **not a signal** | DECISIONS: a remainder is not a sector. |
-| minimum size before ranking | **not a signal** | A selection rule, owned by the distribution layer (DISTRIBUTION_SPEC §16). Open for the user (`min_base`, PLAN). |
+| minimum size before ranking | **not a signal** | A selection rule: ≥ 0.25% of the total a year earlier (user, 2026-11-20, DECISIONS), applied where banks are ranked (`core/bank_tables.mark_small_base`); nothing is stored. |
 | run length ("3rd month below the market") | **not built: needs a user ruling** | Reverses *per-entity streak counts: assessed and NOT added*. If reversed: a 1d relative streak (entity YoY on one side of its parent's, consecutive months, a gap ends the run with a reason). |
 | contribution on bank tables ("HDFC is carrying card e-com") | **built below** | A coverage addition: bank tables carry size, share and growth but no movement, so "how much of the market's move was this bank" has no stored row. |
 | break flag (HDFC share −4.2 pp in one month) | **built below** | Nothing detects a step in one entity's own series. `dominance.py` asks a different question: how much of the *aggregate's* move one bank is. |

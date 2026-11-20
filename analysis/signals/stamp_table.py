@@ -25,6 +25,7 @@ sys.path.insert(0, str(ROOT / "analysis"))
 
 from core import table_rows                                            # noqa: E402
 from core import real_cells                                            # noqa: E402
+from core import bank_tables                                           # noqa: E402
 from core import manifest                          # noqa: E402
 from core.cuts import total_yoy_by_metric                              # noqa: E402
 
@@ -141,7 +142,8 @@ def bank_cuts(pipeline: str) -> dict[str, dict]:
     # Each method fills one column. A share of the bank's own book and a share of the year's new
     # money are columns where the pipeline stores them (bank-wise: both; payments: the second).
     BY_METHOD = {"csv_bank_scan_share": "of_cut", "csv_bank_ratio_scan": "of_book",
-                 "csv_bank_allocation": "alloc", "csv_bank_momentum": "momentum"}
+                 "csv_bank_allocation": "alloc", "csv_bank_momentum": "momentum",
+                 "csv_bank_acceleration": "pace"}
     for sid, sig in reg.items():
         c = sig.get("compute", {})
         if sig.get("pipeline") != pipeline or not c.get("metric"):
@@ -215,6 +217,7 @@ def build(pipeline: str, period: str | None = None) -> dict:
         tables, rates, subs = {}, parent_rates(pipeline), sub_cut_map(pipeline)
         metrics = measured_metric(pipeline)
         banks = {}
+        reg = json.loads(REGISTRY.read_text())["signals"]
         total_yoy = total_yoy_by_metric(pipeline, json.loads(REGISTRY.read_text())["signals"])
         for stem, spec in sorted(bank_cuts(pipeline).items()):
             unit = json.loads(REGISTRY.read_text())["signals"].get(
@@ -226,17 +229,36 @@ def build(pipeline: str, period: str | None = None) -> dict:
                 t["metric"] = spec["metric"]
                 t["level"] = "bank"
                 _label_banks(pipeline, t)
-                if t["parts"] and "label" in t["parts"][0]:
-                    # Growth off a negligible base would rank first (BANKWISE_SPEC §8b gap 4);
-                    # sorting by it waits for the minimum-base rule shared with payments.
-                    t["unsortable"] = ["growth"]
+                # What only a per-bank table needs (core/bank_tables): the minimum base for
+                # ranking, RBI's flagged cells left out, and each declared merger named.
+                bank_tables.mark_small_base(conn, pipeline, period, t, spec["signals"])
+                book_sid = spec["signals"].get("of_book")
+                den = (reg.get(book_sid, {}).get("compute", {}).get("denominator_metric")
+                       if book_sid else None)
+                bank_tables.apply_flags(conn, pipeline, period, t, spec["metric"], den)
+                bank_tables.add_markers(conn, pipeline, t)
                 banks[stem] = t
+        # Each bank's own book, opened from its row on the whole-book table (§8b gap 2).
+        books = bank_tables.books(conn, pipeline, period, reg) if banks else {}
+        names = {pt["entity"]: pt.get("label", pt["entity"]) for t in banks.values() for pt in t["parts"]}
+        for b, bt in books.items():
+            bt["key"] = [k.replace("{bank}", names.get(b, b)) for k in bt["key"]]
+            bt["title"] = names.get(b, b)        # the bank, so a line's chart says whose it is
+        whole = (bank_tables._book_lines(pipeline) or {}).get("whole")
+        for t in banks.values():
+            if books and t["metric"] == whole:
+                t["sub_cut_dir"] = f"{pipeline}_banks"
+                for part in t["parts"]:
+                    if part["entity"] in books:
+                        part["sub_cut"] = f"book/{part['entity']}"
         for stem, unit in sorted(cuts(pipeline).items()):
             t = table_rows.build(conn, pipeline, period, stem, unit, rates.get(stem), subs)
             if t is not None:          # a cut without its 12-month window has no table yet
                 if stem in metrics:
                     t["metric"] = metrics[stem]
                 add_real_economy(conn, pipeline, period, stem, t)
+                if per_bank(pipeline):
+                    bank_tables.add_markers(conn, pipeline, t)
                 tables[stem] = t
     finally:
         conn.close()
@@ -262,6 +284,10 @@ def build(pipeline: str, period: str | None = None) -> dict:
                                  "file": f"{pipeline}_banks/{stem}.json"}
                    for stem, t in banks.items()},
         "_bank_tables": banks,           # written out separately, never into this file
+        # Each bank's own book, one file per bank under {pipeline}_banks/book/, indexed so the
+        # gate reads every file that is served.
+        "_books": {b: f"{pipeline}_banks/book/{b}.json" for b in books},
+        "_book_tables": books,           # written out separately, never into this file
         "_meta": {
             "pipeline": pipeline,
             "period": period,
@@ -313,8 +339,11 @@ def add_real_economy(conn, pipeline: str, period: str, stem: str, t: dict) -> No
 
 
 def _split(payload: dict) -> tuple[dict, dict]:
-    """The main sidecar, and the bank tables that ship beside it one file each."""
+    """The main sidecar, and the bank tables that ship beside it one file each (a bank's book
+    under `book/`)."""
     banks = payload.pop("_bank_tables", {})
+    for b, t in payload.pop("_book_tables", {}).items():
+        banks[f"book/{b}"] = t
     return payload, banks
 
 
@@ -325,12 +354,17 @@ def write(pipeline: str) -> dict:
     d.mkdir(parents=True, exist_ok=True)
     live = set()
     for stem, table in banks.items():
-        (d / f"{stem}.json").write_text(json.dumps(table, indent=1, ensure_ascii=False) + "\n")
+        f = d / f"{stem}.json"
+        f.parent.mkdir(parents=True, exist_ok=True)
+        # A book is fetched on open and never edited by hand, so it ships compact.
+        f.write_text(json.dumps(table, ensure_ascii=False, separators=(",", ":"))
+                     if stem.startswith("book/")
+                     else json.dumps(table, indent=1, ensure_ascii=False) + "\n")
         live.add(f"{stem}.json")
     # A breakout that stops being computed must stop being SERVED: a stale file left behind
     # would answer a fetch with last month's table and nothing would say so.
-    for old in d.glob("*.json"):
-        if old.name not in live:
+    for old in d.glob("**/*.json"):
+        if str(old.relative_to(d)) not in live:
             old.unlink()
     payload["_bank_tables"] = banks          # returned for the caller's counts, not written
     return payload
@@ -339,8 +373,7 @@ def write(pipeline: str) -> dict:
 def check(pipeline: str):
     if not SIDECAR[pipeline].exists():
         return False, "sidecar missing — run without --check"
-    fresh_all = build(pipeline)
-    fresh_banks = fresh_all.pop("_bank_tables", {})
+    fresh_all, fresh_banks = _split(build(pipeline))
     on_disk = json.loads(SIDECAR[pipeline].read_text()).get("cuts", {})
     drift = {k for k in set(on_disk) | set(fresh_all["cuts"])
              if on_disk.get(k) != fresh_all["cuts"].get(k)}
@@ -348,7 +381,8 @@ def check(pipeline: str):
         f = BANK_DIR[pipeline] / f"{stem}.json"
         if not f.exists() or json.loads(f.read_text()) != table:
             drift.add(stem)
-    stale = {f.stem for f in BANK_DIR[pipeline].glob("*.json")} - set(fresh_banks)
+    stale = {str(f.relative_to(BANK_DIR[pipeline]))[:-len(".json")]
+             for f in BANK_DIR[pipeline].glob("**/*.json")} - set(fresh_banks)
     drift |= stale
     if not drift:
         return True, None

@@ -314,7 +314,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           <div className="hidden lg:block lg:col-start-1">
             {cell && table
               ? <div style={{ ...PANEL, padding: 14, position: "sticky", top: 12 }}>
-                  <CutRowList table={tables?.[cell.stem] ?? table} title={cut?.title ?? dim.title}
+                  <CutRowList table={cell.table ?? tables?.[cell.stem] ?? table} title={cut?.title ?? dim.title}
                               cell={cell} color={secColor} onPick={setCell} />
                 </div>
               : rail}
@@ -487,9 +487,9 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           {/* STATE C · the chart is the child, so it takes the column the table was in */}
           {cell && table && (
             <div ref={chartRef} className="mt-5 lg:mt-0 lg:col-start-2 lg:row-start-1">
-              <CellPanel table={tables?.[cell.stem] ?? table} cell={cell} color={secColor}
+              <CellPanel table={cell.table ?? tables?.[cell.stem] ?? table} cell={cell} color={secColor}
                          title={cut?.title ?? dim.title}
-                         flowLabel={(tables?.[cell.stem] ?? table).flow_label}
+                         flowLabel={(cell.table ?? tables?.[cell.stem] ?? table).flow_label}
                          crumb={dim.title}
                          onPick={(col: ColKey) => setCell({ ...cell, col })}
                          onClose={() => setCell(null)} />

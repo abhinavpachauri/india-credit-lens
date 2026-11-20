@@ -9,6 +9,20 @@
       "reads": {},
       "writes": {}
     },
+    "core/bank_tables": {
+      "doc_claims": [],
+      "imports": [
+        "core/absence",
+        "core/manifest",
+        "core/table_rows"
+      ],
+      "invokes": [],
+      "path": "analysis/core/bank_tables.py",
+      "reads": {
+        "series_breaks.json": "low"
+      },
+      "writes": {}
+    },
     "core/banks": {
       "doc_claims": [],
       "imports": [],
@@ -635,6 +649,7 @@
       "doc_claims": [],
       "imports": [
         "core/absence",
+        "core/bank_tables",
         "core/manifest",
         "core/real_cells",
         "core/table_columns",
@@ -1481,6 +1496,7 @@
     "signals/stamp_table": {
       "doc_claims": [],
       "imports": [
+        "core/bank_tables",
         "core/banks",
         "core/manifest",
         "core/real_cells",
@@ -1490,7 +1506,7 @@
       "invokes": [],
       "path": "analysis/signals/stamp_table.py",
       "reads": {
-        "*.json": "low",
+        "**/*.json": "low",
         "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
       },
