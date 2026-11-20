@@ -32,6 +32,9 @@ release-day source is the press-release PDF (the eSankhyiki annex lags by weeks,
 MoSPI's product feed (`POST www.mospi.gov.in/api/product/get-product-data` with `{"product_id": 9}` lists
 every release PDF under `uploads/latestreleasesfiles/`), ask before downloading, then
 `python3 analysis/pipelines/mospi/fetch.py --cpi-pdf {file}`. The dashboard workbook is retired.
+A new WPI release revises earlier months, so SIBC's real-growth rows drift and 2f fails on the
+MoSPI gate: re-append **every** SIBC period (in zsh, loop with `... | while read p; do ...; done`;
+an unquoted `for p in $P` passes all dates as one argument).
 
 ## 1. Format + extract + consolidate, through the gate
 

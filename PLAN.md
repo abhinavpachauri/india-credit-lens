@@ -36,10 +36,10 @@ driver test, each line's delay found on earlier months and confirmed on later on
    overlapping formats. **Next: the user exports ECB (+ CP) from DBIE, then spec, reviewers, build; then a
    pause: a plain-language write-up of what the model says about the credit system (user, 10-26).** After that
    the rest of input prices and a quarterly test for NAS (7 lines).
-2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
+2. **Releases due (October data):** SIBC ~end Nov, payments and NBFC ~early Dec (`/ingest-period`, then
    `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
-   CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every
-   release PDF), read with `fetch.py --cpi-pdf`; automating that fetch is a small next step.
+   MoSPI: IIP Oct by 3 Dec, NAS Q2 by 5 Dec, CPI Nov ~12 Dec, WPI Nov by 19 Dec. CPI comes from the PDF in
+   MoSPI's product feed (the annex lagged again in Nov); automating that fetch is a small next step.
 3. **X:** posts built to 3 Nov (`output/x/2026-10-18/`, `2026-10-23/`); next batch from 4 Nov, release
    stories once SIBC/payments September land. Card e-commerce held: HDFC/SBI share break in Aug.
 4. **Model pass, owed:** risk-arrow signs (arrows that do not say which way they push) and NBFC causes
