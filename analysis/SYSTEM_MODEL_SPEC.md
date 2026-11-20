@@ -764,6 +764,11 @@ Consequences, all under force_check v3.1:
   is now `aligned` because of the test, not because both lines rose, and the cross-source
   opportunity it powers fires only while it is supported. The count ↔ outstanding link is
   definitional (`linked`); its co-movement test (not supported, r = +0.20) is information only.
+  **Re-tested 2026-11-20 with September data (n 19): not supported** (r = +0.36, p = 0.135), so
+  the edge reads dormant and its cross-source opportunity no longer fires. No relationship is
+  admitted today. Same pass: the card-concentration risk was retired (its driver, card growth
+  against its group, cannot say whether concentration rose); it returns with a stored top-5
+  issuer share signal.
 - *Not yet:* the ecosystem constructs, eco-edges and eco-loop (Layer 3) still read direction
   only ("5/5 measurements observed"); out of this pass's scope.
 

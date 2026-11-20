@@ -22702,6 +22702,318 @@
     "profile": {},
     "lag": 2
    }
+  },
+  {
+   "source": "e_S1_3_9_1",
+   "source_label": "Housing Finance Companies (HFCs)",
+   "target": "e_S1_4_2",
+   "target_label": "Housing (Including Priority Sector Housing)",
+   "predicted_sign": -1,
+   "reason": "Banks fund home loans either directly or by lending to housing finance companies, so one channel substitutes for the other.",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": -0.058,
+     "p": 0.747
+    },
+    "1": {
+     "n": 32,
+     "r": -0.122,
+     "p": 0.51
+    },
+    "2": {
+     "n": 30,
+     "r": 0.185,
+     "p": 0.33
+    },
+    "3": {
+     "n": 28,
+     "r": 0.393,
+     "p": 0.041
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
+  },
+  {
+   "source": "e_S2_2_17",
+   "source_label": "Construction",
+   "target": "e_S2_2_12",
+   "target_label": "Cement and Cement Products",
+   "predicted_sign": 1,
+   "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 4,
+   "alpha": 0.0125,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": -0.131,
+     "p": 0.439
+    },
+    "1": {
+     "n": 32,
+     "r": 0.23,
+     "p": 0.197
+    },
+    "2": {
+     "n": 30,
+     "r": -0.236,
+     "p": 0.186
+    },
+    "3": {
+     "n": 28,
+     "r": -0.003,
+     "p": 0.988
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
+  },
+  {
+   "source": "e_S2_2_17",
+   "source_label": "Construction",
+   "target": "e_S2_2_13_1",
+   "target_label": "Iron and Steel",
+   "predicted_sign": 1,
+   "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 4,
+   "alpha": 0.0125,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": 0.015,
+     "p": 0.924
+    },
+    "1": {
+     "n": 32,
+     "r": 0.07,
+     "p": 0.695
+    },
+    "2": {
+     "n": 30,
+     "r": 0.254,
+     "p": 0.173
+    },
+    "3": {
+     "n": 28,
+     "r": -0.113,
+     "p": 0.557
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
+  },
+  {
+   "source": "e_S1_3_8",
+   "source_label": "Commercial Real Estate",
+   "target": "e_S2_2_12",
+   "target_label": "Cement and Cement Products",
+   "predicted_sign": 1,
+   "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 4,
+   "alpha": 0.0125,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": 0.108,
+     "p": 0.543
+    },
+    "1": {
+     "n": 32,
+     "r": -0.144,
+     "p": 0.432
+    },
+    "2": {
+     "n": 30,
+     "r": -0.142,
+     "p": 0.452
+    },
+    "3": {
+     "n": 28,
+     "r": -0.242,
+     "p": 0.206
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
+  },
+  {
+   "source": "e_S1_3_8",
+   "source_label": "Commercial Real Estate",
+   "target": "e_S2_2_13_1",
+   "target_label": "Iron and Steel",
+   "predicted_sign": 1,
+   "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 4,
+   "alpha": 0.0125,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": -0.259,
+     "p": 0.139
+    },
+    "1": {
+     "n": 32,
+     "r": -0.221,
+     "p": 0.221
+    },
+    "2": {
+     "n": 30,
+     "r": 0.21,
+     "p": 0.263
+    },
+    "3": {
+     "n": 28,
+     "r": 0.012,
+     "p": 0.951
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
+  },
+  {
+   "source": "e_S1_4_5",
+   "source_label": "Credit Card Outstanding",
+   "target": "e_S1_4_8",
+   "target_label": "Loans against gold jewellery",
+   "predicted_sign": -1,
+   "reason": "[reroutes_to] Households unable to access or expand unsecured revolving credit shift toward secured gold collateral borrowing for similar liquidity needs",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 12,
+   "alpha": 0.0042,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": -0.168,
+     "p": 0.34
+    },
+    "1": {
+     "n": 32,
+     "r": -0.291,
+     "p": 0.106
+    },
+    "2": {
+     "n": 30,
+     "r": -0.207,
+     "p": 0.275
+    },
+    "3": {
+     "n": 28,
+     "r": -0.103,
+     "p": 0.596
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
+  },
+  {
+   "source": "e_S2_2_9",
+   "source_label": "Chemicals and Chemical Products",
+   "target": "e_S2_2_14",
+   "target_label": "All Engineering",
+   "predicted_sign": 1,
+   "reason": "[amplifies] Upstream specialty chemicals supply chain enables engineering manufacturing production capacity; chemicals credit growth predicts engineering credit expansion",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 12,
+   "alpha": 0.0042,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": 0.095,
+     "p": 0.591
+    },
+    "1": {
+     "n": 32,
+     "r": -0.003,
+     "p": 0.986
+    },
+    "2": {
+     "n": 30,
+     "r": -0.264,
+     "p": 0.163
+    },
+    "3": {
+     "n": 28,
+     "r": -0.152,
+     "p": 0.44
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
+  },
+  {
+   "source": "e_S2_2_13",
+   "source_label": "Basic Metal and Metal Product",
+   "target": "e_S2_2_14",
+   "target_label": "All Engineering",
+   "predicted_sign": 1,
+   "reason": "[amplifies] Steel, aluminium, and metals supply chain feeds engineering and defence manufacturing — upstream metals credit is a leading input to downstream engineering capex",
+   "tested": "2026-11-20",
+   "through_period": "2026-10-30",
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 12,
+   "alpha": 0.0042,
+   "lags": {
+    "0": {
+     "n": 34,
+     "r": 0.043,
+     "p": 0.813
+    },
+    "1": {
+     "n": 32,
+     "r": -0.1,
+     "p": 0.588
+    },
+    "2": {
+     "n": 30,
+     "r": -0.07,
+     "p": 0.702
+    },
+    "3": {
+     "n": 28,
+     "r": 0.255,
+     "p": 0.189
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "note": "Re-test 2026-11-20: the same reason, sign, delay and family on the current history."
   }
  ]
 }

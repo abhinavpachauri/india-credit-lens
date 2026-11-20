@@ -1656,7 +1656,7 @@
       "id": "risk_cc_market_concentration",
       "tier": "risk",
       "label": "Credit card market concentrated in top-5 private banks",
-      "description": "The top-5 private banks control approximately 71% of credit card outstanding. The largest single issuer holds ~20% of the market. This concentration creates systemic fragility — as demonstrated when a single payment bank's exit caused a market-wide debit card step-down. Similar disruption from a major credit card issuer would have proportionally larger effects.",
+      "description": "RETIRED 2026-11-20 (user, model pass): the risk is about how much of the card market a few issuers hold, but its only driver is credit-card growth against its group, which cannot say whether concentration rose or fell in either direction, so its live status read nothing. Returns when a stored top-5 issuer share signal exists (one generic concentration family for payments and rbi_bankwise). Prior claim: The top-5 private banks control approximately 71% of credit card outstanding. The largest single issuer holds ~20% of the market. This concentration creates systemic fragility — as demonstrated when a single payment bank's exit caused a market-wide debit card step-down. Similar disruption from a major credit card issuer would have proportionally larger effects.",
       "claim_type": "inference",
       "domain": "cards_stock",
       "source": "ATM/POS consolidated CSV — cc-bank-scan, cc-private-share, cc-psb-share signals",
@@ -1664,10 +1664,11 @@
       "source_verified_date": "2026-06-10",
       "source_excerpt": "Private banks: 71.0% credit card share; PSBs: 29.0%; competitive landscape stable across ≥2 periods",
       "source_rationale": "Market share data directly observed across ≥2 periods; concentration risk inference from Paytm debit precedent",
-      "status": "active",
+      "status": "retired",
       "annotation_ids": [
         "cc-private-share"
-      ]
+      ],
+      "retire_period": "2026-11-20"
     },
     {
       "id": "opp_credit_card_deepening",

@@ -292,7 +292,7 @@ def record_cross(edge_id: str, result: dict, note: str | None = None) -> Path:
                                  "nulls included. A causal link's state follows its latest test."},
         "tests": []}
     doc["tests"].append({"edge_id": edge_id, **result, **({"note": note} if note else {})})
-    CROSS_TESTS.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+    CROSS_TESTS.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     return CROSS_TESTS
 
 
@@ -327,7 +327,7 @@ def record(pipeline: str, result: dict, note: str | None = None) -> Path:
                                  "become an entity→entity edge, and only with the editor's yes."},
         "tests": []}
     doc["tests"].append({**result, **({"note": note} if note else {})})
-    path.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+    path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     return path
 
 
