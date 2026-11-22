@@ -608,6 +608,18 @@
           "date": "2026-10-03",
           "retryable": true,
           "note": "Deferred by the editor (2026-10-03) to the NBFC August pass: the cause is partly NBFC gold lending, and NBFC's August ingest will likely raise it from its own data. Sourced once there, one verified force attaches to both SIBC and NBFC. Not searched yet."
+        },
+        {
+          "rung": "chrome",
+          "target": "RBI Master Direction – Lending Against Gold and Silver Collateral (final circular)",
+          "url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12859",
+          "tier": "official",
+          "verdict": "excerpt_verified_temporal_unchecked",
+          "llm_verdict": null,
+          "date": "2026-11-21",
+          "retryable": false,
+          "note": "verified via editor browser (host refuses automated reads)",
+          "editor_note": "Editor 2026-11-21: official and in force for the window (adoptable from 6 Jun 2025, mandatory 1 Apr 2026; applies to all NBFCs incl. HFCs). Held, not promoted: its direction is mixed (LTV 85% for consumption loans up to Rs 2.5 lakh loosens; credit assessment above Rs 2.5 lakh, a 12-month bullet tenor cap and weight caps tighten), and NBFC gold-loan YoY peaked at 73.8% in Mar 2026 and eased to 66.1% by Sep 2026, after the compliance date. Promote once the push's direction can be stated."
         }
       ]
     },
@@ -636,6 +648,17 @@
           "date": "2026-10-03",
           "retryable": true,
           "note": "Deferred by the editor (2026-10-03) to the NBFC August pass: the cause is partly NBFC gold lending, and NBFC's August ingest will likely raise it from its own data. Sourced once there, one verified force attaches to both SIBC and NBFC. Not searched yet."
+        },
+        {
+          "rung": "chrome",
+          "target": "RBI Financial Stability Report, household debt / gold-loan financialisation section",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-21",
+          "retryable": true,
+          "note": "Searched in Chrome 2026-11-21 (RBI FSR / RBI Bulletin / gold-loan shift from informal lenders). The shift is stated only in broker research (HDFC Securities gold-loan NBFC report, Jul 2026), which is not on the allowlist; no RBI or PIB page says it. It is also a slow structural drift with no instrument or effective date. Retry if an RBI Financial Stability Report states the shift."
         }
       ]
     },
@@ -650,7 +673,7 @@
         "GST Council or Ministry of Finance press release announcing the rate change",
         "Named financial press report (Economic Times or Mint) on consumer durable sales after the GST cut"
       ],
-      "claim_type": "hypothesis",
+      "claim_type": "inference",
       "from_pipeline": "nbfc",
       "status": "proposed",
       "attempts": [
@@ -664,8 +687,24 @@
           "date": "2026-10-03",
           "retryable": true,
           "note": "Deferred by the editor (2026-10-03) to the NBFC August pass, with every NBFC-raised proposal (17, 18, 19): it was raised from NBFC's July data and is about NBFC's consumer-durable book, so NBFC's August ingest decides whether it still needs explaining. Not searched yet."
+        },
+        {
+          "rung": "chrome",
+          "target": "CBIC notification implementing the GST Council's revised rates for consumer durables (GST 2.0, effective September 2025)",
+          "url": "https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2163555",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": null,
+          "date": "2026-11-21",
+          "retryable": false,
+          "note": "verified via editor browser (host refuses automated reads)",
+          "editor_note": "Editor 2026-11-21: promote. GST goods rates cut w.e.f. 22 Sep 2025, in force across the Oct 2025 - Sep 2026 window; NBFC consumer-durable YoY rose from 22.2% (Sep 2025) to 56.4% (Aug 2026), 54.4% in Sep. Enters the NBFC model at its first FOUNDATION (decided with the October file, release 6), since the behavioral layer is deferred until then."
         }
-      ]
+      ],
+      "promotable": true,
+      "source_url": "https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2163555",
+      "source_excerpt": "Reduction of GST from 28% to 18% on Air-conditioning machines",
+      "source_verified_date": "2026-11-21"
     },
     {
       "kind": "cross_edge",
