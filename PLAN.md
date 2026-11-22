@@ -64,9 +64,6 @@ driver test, each line's delay found on earlier months and confirmed on later on
   quote them. Until then they stay out: a derived number no gate grounds. Needs a spec, a measured gate, a re-append of every period.
 - **Agentic layer:** `add-signal-family` and `measure-gate` skills ⬜, each written while doing its real task
   (the story-readings and driver-test builds of 10-10/12 were candidates; not yet written).
-- **The git hooks run whichever `python3` is first on PATH** (found 10-25): the system 3.9 (numpy 2.0) recomputes
-  18 signal rows differently from Anaconda 3.12 (numpy 1.26) in the 4th decimal, so freshness fails on an
-  unchanged store. Pin the interpreter in `analysis/git_hooks/*` (one variable), not a tolerance.
 - **The merger gap is unexplained on screen** (10-10): growth cells absent for `merger_break` (Jan–Jun 2024)
   draw blank with no reason; "Every reading" skips them. A `/dashboard-change`.
 - **12 S4 proposals unsearched** (`analysis/s4_proposals/2026-09-30.json`); 20 more from 2026-08-31.

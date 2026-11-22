@@ -3,4 +3,6 @@
 # (signals/README.md, "How the store is committed"). Never overwrites local changes; a conflict is
 # reported, not resolved.
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-python3 "$REPO_ROOT/analysis/signals/db_pack.py" unpack || true
+source "$REPO_ROOT/analysis/git_hooks/python.sh"
+icl_python_ok || exit 0   # a checkout or merge is never blocked; the warning says why the store was not unpacked
+"$ICL_PYTHON" "$REPO_ROOT/analysis/signals/db_pack.py" unpack || true
